@@ -7,7 +7,7 @@
   },
   "scripts": {
     "format": "poetry run black kuflow_rest_client",
-    "openapi": "poetry run npx @openapitools/openapi-generator-cli generate -i etc/openapi.yaml -g python --additional-properties=generateSourceCodeOnly=true,packageName=kuflow_rest_client,packageVersion=0.1.0,hideGenerationTimestamp=true",
+    "openapi": "openapi-generator-cli generate -i etc/openapi.yaml -g python-experimental --additional-properties=generateSourceCodeOnly=true,packageName=kuflow_rest_client,packageVersion=0.1.0,hideGenerationTimestamp=true",
     "generate": "npm run openapi && npm run format"
   }
 }
