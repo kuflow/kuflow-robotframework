@@ -1,0 +1,1 @@
+# Important: Use JDK 11 to run 'npm run generate', java 17 don't works
