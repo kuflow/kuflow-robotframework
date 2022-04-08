@@ -1504,7 +1504,7 @@ class Schema:
         )
         from pprint import pprint
 
-        # pprint(dict(_path_to_schemas))
+        pprint(dict(_path_to_schemas))
         # loop through it make a new class for each entry
         for path, schema_classes in _path_to_schemas.items():
             enum_schema = any(
