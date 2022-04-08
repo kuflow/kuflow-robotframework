@@ -379,44 +379,44 @@ paths:
         default:
           $ref: "#/components/responses/DefaultError"
 
-  # /tasks/{id}/~actions/save-element-document:
-  #   post:
-  #     summary: Save an element document
-  #     description: |
-  #       Allow to save an element document.
+  /tasks/{id}/~actions/save-element-document:
+    post:
+      summary: Save an element document
+      description: |
+        Allow to save an element document.
 
-  #       If it is a multiple element, and the Id referenced in the body does not exist or is empty, the document will be added to the element.
-  #       If the element already exists (the Id referenced in the body corresponds to an existing one), it updates it.
-  #     operationId: actionsSaveElementDocument
-  #     tags:
-  #       - task
-  #     parameters:
-  #       - $ref: "#/components/parameters/IdPathParam"
-  #     requestBody:
-  #       required: true
-  #       content:
-  #         multipart/form-data:
-  #           schema:
-  #             type: object
-  #             properties:
-  #               json:
-  #                 $ref: "#/components/schemas/SaveElementDocumentCommand"
-  #               file:
-  #                 type: string
-  #                 format: binary
-  #             required:
-  #               - json
-  #               - file
-  #           encoding:
-  #             file:
-  #               contentType: image/*, application/pdf
-  #     responses:
-  #       "200":
-  #         description: Task with element filled
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: "#/components/schemas/Task"
+        If it is a multiple element, and the Id referenced in the body does not exist or is empty, the document will be added to the element.
+        If the element already exists (the Id referenced in the body corresponds to an existing one), it updates it.
+      operationId: actionsSaveElementDocument
+      tags:
+        - task
+      parameters:
+        - $ref: "#/components/parameters/IdPathParam"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                json:
+                  $ref: "#/components/schemas/SaveElementDocumentCommand"
+                file:
+                  type: string
+                  format: binary
+              required:
+                - json
+                - file
+            # encoding:
+            #   file:
+            #     contentType: image/*, application/pdf
+      responses:
+        "200":
+          description: Task with element filled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
 
   /tasks/{id}/~actions/delete-element:
     post:

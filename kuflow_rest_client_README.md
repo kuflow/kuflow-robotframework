@@ -85,6 +85,7 @@ Class | Method | HTTP request | Description
 *TaskApi* | [**actions_delete_element**](kuflow_rest_client/docs/TaskApi.md#actions_delete_element) | **POST** /tasks/{id}/~actions/delete-element | Delete an element by code
 *TaskApi* | [**actions_download_element_document**](kuflow_rest_client/docs/TaskApi.md#actions_download_element_document) | **GET** /tasks/{id}/~actions/download-element-document | Download document
 *TaskApi* | [**actions_save_element**](kuflow_rest_client/docs/TaskApi.md#actions_save_element) | **POST** /tasks/{id}/~actions/save-element | Save an element
+*TaskApi* | [**actions_save_element_document**](kuflow_rest_client/docs/TaskApi.md#actions_save_element_document) | **POST** /tasks/{id}/~actions/save-element-document | Save an element document
 *TaskApi* | [**create_task**](kuflow_rest_client/docs/TaskApi.md#create_task) | **POST** /tasks | Create a new Task in the selected Process
 *TaskApi* | [**find_tasks**](kuflow_rest_client/docs/TaskApi.md#find_tasks) | **GET** /tasks | Find all accessible Taks
 *TaskApi* | [**retrieve_task**](kuflow_rest_client/docs/TaskApi.md#retrieve_task) | **GET** /tasks/{id} | Get a task given it Id
@@ -116,7 +117,6 @@ Class | Method | HTTP request | Description
  - [ProcessPage](kuflow_rest_client/docs/ProcessPage.md)
  - [ProcessPageAllOf](kuflow_rest_client/docs/ProcessPageAllOf.md)
  - [ProcessState](kuflow_rest_client/docs/ProcessState.md)
- - [SaveElementDocumentCommand](kuflow_rest_client/docs/SaveElementDocumentCommand.md)
  - [Task](kuflow_rest_client/docs/Task.md)
  - [TaskAllOf](kuflow_rest_client/docs/TaskAllOf.md)
  - [TaskElementValue](kuflow_rest_client/docs/TaskElementValue.md)

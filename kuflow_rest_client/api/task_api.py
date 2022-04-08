@@ -35,6 +35,9 @@ from kuflow_rest_client.api.task_api_endpoints.actions_download_element_document
 from kuflow_rest_client.api.task_api_endpoints.actions_save_element import (
     ActionsSaveElement,
 )
+from kuflow_rest_client.api.task_api_endpoints.actions_save_element_document import (
+    ActionsSaveElementDocument,
+)
 from kuflow_rest_client.api.task_api_endpoints.create_task import CreateTask
 from kuflow_rest_client.api.task_api_endpoints.find_tasks import FindTasks
 from kuflow_rest_client.api.task_api_endpoints.retrieve_task import RetrieveTask
@@ -49,6 +52,7 @@ class TaskApi(
     ActionsDeleteElement,
     ActionsDownloadElementDocument,
     ActionsSaveElement,
+    ActionsSaveElementDocument,
     CreateTask,
     FindTasks,
     RetrieveTask,
