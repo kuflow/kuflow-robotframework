@@ -1419,9 +1419,7 @@ class RequestBody(StyleFormSerializer):
             name = key
             filename = os.path.basename(value.name)
             data = value.read()
-            mimetype = (
-                mimetypes.guess_type(filename)[0] or "application/octet-stream"
-            )
+            mimetype = mimetypes.guess_type(filename)[0] or "application/octet-stream"
             value.close()
             return tuple([name, tuple([filename, data, mimetype])])
             # request_field = RequestField(
