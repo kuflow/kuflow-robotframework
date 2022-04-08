@@ -10,8 +10,7 @@ from kuflow_rest_client.model.element_value_or_array_value import ElementValueOr
 
 configuration = kuflow_rest_client.Configuration(
     host="https://api.sandbox.kuflow.com/v1.0",
-    username="72fcb58c-5028-41e1-b4d1-417df487ade6",
-    password="#:X9qHXbU5[8cKd",
+
 )
 
 # Enter a context with an instance of the API client

@@ -31,9 +31,12 @@ you can run the following:
 import time
 import kuflow_rest_client
 from pprint import pprint
-from kuflow_rest_client.api import authentication_api
-from kuflow_rest_client.model.authentication import Authentication
+from kuflow_rest_client.api import task_api
 from kuflow_rest_client.model.default_error import DefaultError
+from kuflow_rest_client.model.element_value_or_array_value import ElementValueOrArrayValue
+from kuflow_rest_client.model.log import Log
+from kuflow_rest_client.model.save_element_document_command import SaveElementDocumentCommand
+from kuflow_rest_client.model.task import Task
 # Defining the host is optional and defaults to https://api.kuflow.com/v1.0
 # See configuration.py for a list of all supported configuration parameters.
 configuration = kuflow_rest_client.Configuration(
@@ -54,15 +57,21 @@ configuration = kuflow_rest_client.Configuration(
 # Enter a context with an instance of the API client
 with kuflow_rest_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = authentication_api.AuthenticationApi(api_client)
-    authentication = Authentication() # Authentication | 
+    api_instance = task_api.TaskApi(api_client)
+    id = "id_example" # str | The resource Id
+log = Log(
+        id="id_example",
+        created_at=isoparse('1970-01-01T00:00:00.00Z'),
+        message="message_example",
+        level=LogLevel("INFO"),
+    ) # Log | 
 
     try:
-        # Create an authentication for the current principal
-        api_response = api_instance.create_authentication(authentication)
+        # Append a log to the task
+        api_response = api_instance.actions_append_log(idlog)
         pprint(api_response)
     except kuflow_rest_client.ApiException as e:
-        print("Exception when calling AuthenticationApi->create_authentication: %s\n" % e)
+        print("Exception when calling TaskApi->actions_append_log: %s\n" % e)
 ```
 
 ## Documentation for API Endpoints
@@ -71,67 +80,26 @@ All URIs are relative to *https://api.kuflow.com/v1.0*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*AuthenticationApi* | [**create_authentication**](kuflow_rest_client/docs/AuthenticationApi.md#create_authentication) | **POST** /authentications | Create an authentication for the current principal
-*ProcessApi* | [**actions_cancel_process**](kuflow_rest_client/docs/ProcessApi.md#actions_cancel_process) | **POST** /processes/{id}/~actions/cancel | Cancel a Process
-*ProcessApi* | [**actions_complete_process**](kuflow_rest_client/docs/ProcessApi.md#actions_complete_process) | **POST** /processes/{id}/~actions/complete | Complete a Process
-*ProcessApi* | [**create_process**](kuflow_rest_client/docs/ProcessApi.md#create_process) | **POST** /processes | Create a new process
-*ProcessApi* | [**find_processes**](kuflow_rest_client/docs/ProcessApi.md#find_processes) | **GET** /processes | Find all accessible Processes
-*ProcessApi* | [**retrieve_process**](kuflow_rest_client/docs/ProcessApi.md#retrieve_process) | **GET** /processes/{id} | Get a Process by Id
 *TaskApi* | [**actions_append_log**](kuflow_rest_client/docs/TaskApi.md#actions_append_log) | **POST** /tasks/{id}/~actions/append-log | Append a log to the task
-*TaskApi* | [**actions_assign_task**](kuflow_rest_client/docs/TaskApi.md#actions_assign_task) | **POST** /tasks/{id}/~actions/assign | Assign a task
-*TaskApi* | [**actions_claim_task**](kuflow_rest_client/docs/TaskApi.md#actions_claim_task) | **POST** /tasks/{id}/~actions/claim | Claim a task
-*TaskApi* | [**actions_complete_task**](kuflow_rest_client/docs/TaskApi.md#actions_complete_task) | **POST** /tasks/{id}/~actions/complete | Complete a task
-*TaskApi* | [**actions_delete_document**](kuflow_rest_client/docs/TaskApi.md#actions_delete_document) | **POST** /tasks/{id}/~actions/delete-element-document | Delete an element document value
-*TaskApi* | [**actions_delete_element**](kuflow_rest_client/docs/TaskApi.md#actions_delete_element) | **POST** /tasks/{id}/~actions/delete-element | Delete an element by code
-*TaskApi* | [**actions_download_element_document**](kuflow_rest_client/docs/TaskApi.md#actions_download_element_document) | **GET** /tasks/{id}/~actions/download-element-document | Download document
 *TaskApi* | [**actions_save_element**](kuflow_rest_client/docs/TaskApi.md#actions_save_element) | **POST** /tasks/{id}/~actions/save-element | Save an element
 *TaskApi* | [**actions_save_element_document**](kuflow_rest_client/docs/TaskApi.md#actions_save_element_document) | **POST** /tasks/{id}/~actions/save-element-document | Save an element document
-*TaskApi* | [**create_task**](kuflow_rest_client/docs/TaskApi.md#create_task) | **POST** /tasks | Create a new Task in the selected Process
-*TaskApi* | [**find_tasks**](kuflow_rest_client/docs/TaskApi.md#find_tasks) | **GET** /tasks | Find all accessible Taks
-*TaskApi* | [**retrieve_task**](kuflow_rest_client/docs/TaskApi.md#retrieve_task) | **GET** /tasks/{id} | Get a task given it Id
 
 ## Documentation For Models
 
  - [AbstractAudited](kuflow_rest_client/docs/AbstractAudited.md)
- - [AssignTaskCommand](kuflow_rest_client/docs/AssignTaskCommand.md)
- - [Authentication](kuflow_rest_client/docs/Authentication.md)
- - [AuthenticationAllOf](kuflow_rest_client/docs/AuthenticationAllOf.md)
- - [AuthenticationType](kuflow_rest_client/docs/AuthenticationType.md)
  - [DefaultError](kuflow_rest_client/docs/DefaultError.md)
  - [DefaultErrorInfo](kuflow_rest_client/docs/DefaultErrorInfo.md)
- - [DeleteElementCommand](kuflow_rest_client/docs/DeleteElementCommand.md)
- - [DeleteElementDocumentCommand](kuflow_rest_client/docs/DeleteElementDocumentCommand.md)
- - [ElementDefinitionType](kuflow_rest_client/docs/ElementDefinitionType.md)
  - [ElementValueDocument](kuflow_rest_client/docs/ElementValueDocument.md)
  - [ElementValueOrArrayValue](kuflow_rest_client/docs/ElementValueOrArrayValue.md)
  - [Log](kuflow_rest_client/docs/Log.md)
  - [LogLevel](kuflow_rest_client/docs/LogLevel.md)
- - [Page](kuflow_rest_client/docs/Page.md)
- - [PageMetadata](kuflow_rest_client/docs/PageMetadata.md)
  - [Principal](kuflow_rest_client/docs/Principal.md)
  - [PrincipalType](kuflow_rest_client/docs/PrincipalType.md)
- - [Process](kuflow_rest_client/docs/Process.md)
- - [ProcessAllOf](kuflow_rest_client/docs/ProcessAllOf.md)
- - [ProcessDefinitionSummary](kuflow_rest_client/docs/ProcessDefinitionSummary.md)
- - [ProcessElementValue](kuflow_rest_client/docs/ProcessElementValue.md)
- - [ProcessPage](kuflow_rest_client/docs/ProcessPage.md)
- - [ProcessPageAllOf](kuflow_rest_client/docs/ProcessPageAllOf.md)
- - [ProcessState](kuflow_rest_client/docs/ProcessState.md)
  - [Task](kuflow_rest_client/docs/Task.md)
  - [TaskAllOf](kuflow_rest_client/docs/TaskAllOf.md)
  - [TaskElementValue](kuflow_rest_client/docs/TaskElementValue.md)
- - [TaskPage](kuflow_rest_client/docs/TaskPage.md)
- - [TaskPageAllOf](kuflow_rest_client/docs/TaskPageAllOf.md)
  - [TaskState](kuflow_rest_client/docs/TaskState.md)
  - [TasksDefinitionSummary](kuflow_rest_client/docs/TasksDefinitionSummary.md)
- - [WebhookEvent](kuflow_rest_client/docs/WebhookEvent.md)
- - [WebhookEventProcessStateChanged](kuflow_rest_client/docs/WebhookEventProcessStateChanged.md)
- - [WebhookEventProcessStateChangedAllOf](kuflow_rest_client/docs/WebhookEventProcessStateChangedAllOf.md)
- - [WebhookEventProcessStateChangedData](kuflow_rest_client/docs/WebhookEventProcessStateChangedData.md)
- - [WebhookEventTaskStateChanged](kuflow_rest_client/docs/WebhookEventTaskStateChanged.md)
- - [WebhookEventTaskStateChangedAllOf](kuflow_rest_client/docs/WebhookEventTaskStateChangedAllOf.md)
- - [WebhookEventTaskStateChangedData](kuflow_rest_client/docs/WebhookEventTaskStateChangedData.md)
- - [WebhookType](kuflow_rest_client/docs/WebhookType.md)
 
 ## Documentation For Authorization
 
@@ -143,8 +111,6 @@ Class | Method | HTTP request | Description
 
 ## Author
 
-kuflow@kuflow.com
-kuflow@kuflow.com
 kuflow@kuflow.com
 
 ## Notes for Large OpenAPI documents

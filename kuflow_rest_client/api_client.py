@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 import enum
 import json
+import mimetypes
 import os
 import io
 import atexit
@@ -891,6 +892,7 @@ class OpenApiResponse:
         self, response: urllib3.HTTPResponse, configuration: Configuration
     ) -> ApiResponse:
         content_type = response.getheader("content-type")
+        content_type = "application/json"
         deserialized_body = unset
         streamed = response.supports_chunked_reads()
         if self.content is not None:
@@ -1413,16 +1415,27 @@ class RequestBody(StyleFormSerializer):
                 headers={"Content-Type": "application/octet-stream"},
             )
         elif isinstance(value, FileIO):
-            request_field = RequestField(
-                name=key,
-                data=value.read(),
-                filename=os.path.basename(value.name),
-                headers={"Content-Type": "application/octet-stream"},
-            )
+            # KF: Fix Content-disposition and Content-Type
+            name = key
+            filename = os.path.basename(value.name)
+            data = value.read()
+            mimetype = mimetypes.guess_type(filename)[0] or "application/octet-stream"
             value.close()
-            return request_field
+            return tuple([name, tuple([filename, data, mimetype])])
+            # request_field = RequestField(
+            #     name=key,
+            #     data=value.read(),
+            #     filename=os.path.basename(value.name),
+            #     headers={"Content-Type": "application/octet-stream"},
+            # )
+            # value.close()
+            # return request_field
         else:
-            return self.__multipart_json_item(key=key, value=value)
+            # KF: Fix COntent-disposition
+            request_field = self.__multipart_json_item(key=key, value=value)
+            request_field.make_multipart(content_type="application/json")
+            return request_field
+            # return self.__multipart_json_item(key=key, value=value)
 
     def __serialize_multipart_form_data(
         self, in_data: Schema
@@ -1458,6 +1471,7 @@ class RequestBody(StyleFormSerializer):
                     fields.append(request_field)
             else:
                 request_field = self.__multipart_form_item(key=key, value=value)
+                # request_field.make_multipart(content_type="application/json")
                 fields.append(request_field)
 
         return dict(fields=tuple(fields))

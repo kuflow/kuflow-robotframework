@@ -32,48 +32,6 @@ class TestTaskApi(unittest.TestCase):
         """
         pass
 
-    def test_actions_assign_task(self):
-        """Test case for actions_assign_task
-
-        Assign a task  # noqa: E501
-        """
-        pass
-
-    def test_actions_claim_task(self):
-        """Test case for actions_claim_task
-
-        Claim a task  # noqa: E501
-        """
-        pass
-
-    def test_actions_complete_task(self):
-        """Test case for actions_complete_task
-
-        Complete a task  # noqa: E501
-        """
-        pass
-
-    def test_actions_delete_document(self):
-        """Test case for actions_delete_document
-
-        Delete an element document value  # noqa: E501
-        """
-        pass
-
-    def test_actions_delete_element(self):
-        """Test case for actions_delete_element
-
-        Delete an element by code  # noqa: E501
-        """
-        pass
-
-    def test_actions_download_element_document(self):
-        """Test case for actions_download_element_document
-
-        Download document  # noqa: E501
-        """
-        pass
-
     def test_actions_save_element(self):
         """Test case for actions_save_element
 
@@ -81,24 +39,10 @@ class TestTaskApi(unittest.TestCase):
         """
         pass
 
-    def test_create_task(self):
-        """Test case for create_task
+    def test_actions_save_element_document(self):
+        """Test case for actions_save_element_document
 
-        Create a new Task in the selected Process  # noqa: E501
-        """
-        pass
-
-    def test_find_tasks(self):
-        """Test case for find_tasks
-
-        Find all accessible Taks  # noqa: E501
-        """
-        pass
-
-    def test_retrieve_task(self):
-        """Test case for retrieve_task
-
-        Get a task given it Id  # noqa: E501
+        Save an element document  # noqa: E501
         """
         pass
 

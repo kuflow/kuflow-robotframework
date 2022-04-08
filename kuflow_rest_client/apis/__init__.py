@@ -7,7 +7,7 @@
 # raise a `RecursionError`.
 # In order to avoid this, import only the API that you directly need like:
 #
-#   from .api.authentication_api import AuthenticationApi
+#   from .api.task_api import TaskApi
 #
 # or import this package, but before doing it, use:
 #
@@ -15,6 +15,4 @@
 #   sys.setrecursionlimit(n)
 
 # Import APIs into API package:
-from kuflow_rest_client.api.authentication_api import AuthenticationApi
-from kuflow_rest_client.api.process_api import ProcessApi
 from kuflow_rest_client.api.task_api import TaskApi

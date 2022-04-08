@@ -1,0 +1,403 @@
+openapi: 3.0.3
+
+info:
+  title: KuFlow Public API
+  version: "1.0"
+  termsOfService: "https://kuflow.com/legal"
+  contact:
+    email: kuflow@kuflow.com
+  description: |
+    # Introduction
+    This document contains the KuFlow REST API reference. This API is a fundamental part in the integration of external systems with KuFlow and is used, among others, by the different implementations of the Workers that connect to our network.
+
+    # API Versioning
+
+    A versioning strategy allows our clients to continue using the existing REST API and migrate their applications to the newer API when they are ready.
+
+    The scheme followed is a simplification of *Semver* where only MAJOR versions are differentiated from MINOR or PATCH versions, i.e. a version number of only two levels is used. With this approach, you only have to migrate your applications if you want to upgrade to a MAJOR version of the KuFlow API. In case you want to upgrade to a MINOR version, you can do so without any incompatibility issues.
+
+    The versioning of the api is done through the URI Path, that is, the version number is included in the URI Path. The URL structure would be as follows:
+
+    ```bash
+    https://{endpoint}/vMAJOR.MINOR/{api-path}
+    ```
+
+    # Idempotency
+
+    The API is designed to support idempotency in order to achieve a correct resilience in the implementation of its clients. The way to achieve this is very simple, in the methods that create resources, you simply have to specify a UUID in the input data and the API will respond by creating or returning the resource if it previously existed. With this mechanism, your systems can implement retry logic without worrying about performing data tradeoffs.
+
+    # OpenAPI Specification
+
+    This API is documented in OpenAPI format. This file allows you to create REST clients with the technology of your choice automatically. In our code repositories you can find an example of this automation using Feign for JAVA.
+
+externalDocs:
+  description: Find out more about KuFlow
+  url: "https://kuflow.com"
+
+servers:
+  - url: "https://api.kuflow.com/v1.0"
+    description: Live environment
+
+security:
+  - BasicAuth: []
+
+tags:
+  - name: task
+    description: Operations about task.
+    externalDocs:
+      description: Find out more about our task.
+      url: "https://kuflow.com"
+
+x-tagGroups:
+  - name: General
+    tags:
+      - task
+
+paths:
+
+  /tasks/{id}/~actions/save-element:
+    post:
+      summary: Save an element
+      description: |
+        Allow to save an element that is not a document i.e., a field, a decision or form. If you want to add documents, use the appropriate API method.
+
+        If values already exist for the provided element code, it replaces them with the new ones, otherwise it creates them.
+        To remove an element, use the appropriate API method.
+      operationId: actionsSaveElement
+      tags:
+        - task
+      parameters:
+        - $ref: "#/components/parameters/IdPathParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ElementValueOrArrayValue"
+      responses:
+        "200":
+          description: Task with element filled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        default:
+          $ref: "#/components/responses/DefaultError"
+
+  /tasks/{id}/~actions/save-element-document:
+    post:
+      summary: Save an element document
+      description: |
+        Allow to save an element document.
+
+        If it is a multiple element, and the Id referenced in the body does not exist or is empty, the document will be added to the element.
+        If the element already exists (the Id referenced in the body corresponds to an existing one), it updates it.
+      operationId: actionsSaveElementDocument
+      tags:
+        - task
+      parameters:
+        - $ref: "#/components/parameters/IdPathParam"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                json:
+                  $ref: "#/components/schemas/SaveElementDocumentCommand"
+                file:
+                  type: string
+                  format: binary
+              required:
+                - json
+                - file
+            # encoding:
+            #   file:
+            #     contentType: image/*, application/pdf
+      responses:
+        "200":
+          description: Task with element filled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+
+  /tasks/{id}/~actions/append-log:
+    post:
+      summary: Append a log to the task
+      description: A log entry is added to the task. If the number of log entries is reached, the oldest log entry is removed.
+      operationId: actionsAppendLog
+      tags:
+        - task
+      parameters:
+        - $ref: "#/components/parameters/IdPathParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Log"
+      responses:
+        "200":
+          description: Log entry added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+
+components:
+  parameters:
+    IdPathParam:
+      name: id
+      in: path
+      description: The resource Id
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+  schemas:
+    DefaultError:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/DefaultErrorInfo"
+      required:
+        - timestamp
+        - status
+        - message
+
+    DefaultErrorInfo:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        location:
+          type: string
+        locationType:
+          type: string
+      required:
+        - code
+        - message
+
+    AbstractAudited:
+      type: object
+      properties:
+        createdBy:
+          type: string
+          format: uuid
+          description: Who create this model
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          description: When this model was created
+          readOnly: true
+        lastModifiedBy:
+          type: string
+          format: uuid
+          description: Who was last update this model
+          readOnly: true
+        lastModifiedAt:
+          type: string
+          format: date-time
+          description: When this model type was last updated.
+          readOnly: true
+
+    TaskState:
+      type: string
+      enum:
+        - READY
+        - CLAIMED
+        - COMPLETED
+        - CANCELLED
+
+    ElementValueOrArrayValue:
+      type: object
+      properties:
+        code:
+          type: string
+        value:
+          oneOf:
+            - $ref: "#/components/schemas/TaskElementValue"
+            - type: array
+              items:
+                $ref: "#/components/schemas/TaskElementValue"
+      required:
+        - code
+
+    TaskElementValue:
+      type: object
+      properties:
+        valid:
+          type: boolean
+          default: true
+        value:
+          oneOf:
+            - type: string
+            - type: number
+            - type: object
+
+    ElementValueDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        contentPath:
+          type: string
+        contentType:
+          type: string
+        contentLength:
+          type: integer
+          format: int64
+
+    SaveElementDocumentCommand:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        valid:
+          type: boolean
+          default: true
+
+    Task:
+      allOf:
+        - $ref: "#/components/schemas/AbstractAudited"
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            state:
+              readOnly: true
+              allOf:
+                - $ref: "#/components/schemas/TaskState"
+            taskDefinition:
+              $ref: "#/components/schemas/TasksDefinitionSummary"
+            processId:
+              type: string
+              format: uuid
+            activityToken:
+              type: string
+              description: When create a Kuflow Task backed with a Temporal.io servers, this value is required and must be setted with the context task token of Temporal.io activity
+            activityResponseVersion:
+              type: string
+              description: When create a Kuflow Task backed with a Temporal.io servers, this value is required and must be setted with the activity version response.
+            elementValues:
+              type: object
+              description: A ElementValueDocument or an array of ElementValueDocument is not allowed in any type of requests
+              additionalProperties:
+                oneOf:
+                  - $ref: "#/components/schemas/TaskElementValue"
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/TaskElementValue"
+                  - $ref: "#/components/schemas/ElementValueDocument"
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/ElementValueDocument"
+            logs:
+              type: array
+              readOnly: true
+              items:
+                $ref: "#/components/schemas/Log"
+            owner:
+              readOnly: true
+              allOf:
+                - $ref: "#/components/schemas/Principal"
+          required:
+            - taskDefinition
+            - processId
+
+    TasksDefinitionSummary:
+      type: object
+      description: In creation task, one of 'id, version or code' is mandatory
+      properties:
+        id:
+          type: string
+          format: uuid
+        version:
+          type: string
+          format: uuid
+        code:
+          type: string
+        name:
+          type: string
+          minLength: 1
+          maxLength: 50
+          readOnly: true
+
+    LogLevel:
+      type: string
+      enum:
+        - INFO
+        - WARN
+        - ERROR
+
+    Log:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          description: When this model was created
+          readOnly: true
+        message:
+          type: string
+        level:
+          $ref: "#/components/schemas/LogLevel"
+      required:
+        - message
+        - level
+
+    Principal:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          $ref: "#/components/schemas/PrincipalType"
+        name:
+          type: string
+
+    PrincipalType:
+      type: string
+      enum:
+        - USER
+        - APPLICATION
+        - SYSTEM
+
+  responses:
+    DefaultError:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/DefaultError"
+
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
