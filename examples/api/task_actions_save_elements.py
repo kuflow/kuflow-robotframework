@@ -1,13 +1,10 @@
 import kuflow_rest_client
-import time
 
 from kuflow_rest_client.api import task_api
 from kuflow_rest_client.model.element_value_or_array_value import ElementValueOrArrayValue
-from kuflow_rest_client.model.task import Task
-from kuflow_rest_client.model.task_element_value import TaskElementValue
 
 configuration = kuflow_rest_client.Configuration(
-    host="https://api.sandbox.kuflow.com/v1.0",
+    host="https://api.kuflow.com/v1.0",
     username="",
     password="",
 )
@@ -33,14 +30,14 @@ def make_request(body):
 # FIELD
 body = ElementValueOrArrayValue(
     code="FIELD",
-    value=ElementValueOrArrayValue.value({"value": 'Hola', "valid": False}),
+    value=ElementValueOrArrayValue.value({"value": 'Hi', "valid": False}),
 )
 make_request(body)
 
 # FIELD MULTIPLE
 body = ElementValueOrArrayValue(
     code="FIELD_MULTIPLE",
-    value=ElementValueOrArrayValue.value([{"value": 'Hola', "valid": False}, {"value": 'Adios', "valid": False}]),
+    value=ElementValueOrArrayValue.value([{"value": 'Hi', "valid": False}, {"value": 'Bye', "valid": False}]),
 )
 make_request(body)
 

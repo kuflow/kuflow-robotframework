@@ -5,7 +5,7 @@ from kuflow_rest_client.api import task_api
 from kuflow_rest_client.model.element_value_or_array_value import ElementValueOrArrayValue
 
 configuration = kuflow_rest_client.Configuration(
-    host="https://api.sandbox.kuflow.com/v1.0",
+    host="https://api.kuflow.com/v1.0",
     username="",
     password="",
 )

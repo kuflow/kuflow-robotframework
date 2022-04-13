@@ -5,19 +5,16 @@ from kuflow_rest_client.model.element_value_or_array_value import ElementValueOr
 from kuflow_rest_client.model.log import Log
 from kuflow_rest_client.model.log_level import LogLevel
 from kuflow_rest_client.model.save_element_document_command import SaveElementDocumentCommand
-
-# TODO Homogenize versions
-__version__ = '1.0.0'
+from robot.api.deco import keyword
 
 
-class KuFlow:
-    ROBOT_LIBRARY_VERSION = __version__
-    ROBOT_LIBRARY_SCOPE = 'GLOBAL'
+class Keywords:
 
     def __init__(self) -> None:
         self.logger = logging.getLogger(__name__)
         self._client_configuration = None
 
+    @keyword(tags=("settings",))
     def set_client_authentication(self, endpoint, identifier, token):
         self._client_configuration = kuflow_rest_client.Configuration(
             host=endpoint,
@@ -25,6 +22,7 @@ class KuFlow:
             password=token,
         )
 
+    @keyword()
     def append_log_message(self, task_id: str, message: str, level=LogLevel.INFO):
         """Add a log entry to the task
 
@@ -46,6 +44,7 @@ class KuFlow:
 
         self._do_append_log_request(task_id, body)
 
+    @keyword()
     def save_element_document(self, task_id: str, code: str, path):
         """Save a element of type document
 
@@ -69,6 +68,7 @@ class KuFlow:
 
         self._do_save_element_document_request(task_id, body)
 
+    @keyword()
     def save_element(self, task_id, code, value, valid=True):
         """Save a element
 
@@ -94,6 +94,7 @@ class KuFlow:
         )
         self._do_save_element_request(task_id, body)
 
+    @keyword()
     def save_elements(self, task_id, code, source_values: list):
         """Save a element
 

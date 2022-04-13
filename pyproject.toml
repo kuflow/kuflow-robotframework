@@ -1,11 +1,13 @@
 [tool.poetry]
 name = "kuflow-robotframework"
 version = "0.1.0"
-description = ""
+description = "KuFlow library for Robot Framework"
 authors = ["KuFlow S.L. <kuflow@kuflow.com>"]
+license = "MIT License"
+readme = "README.rst"
 
 packages = [
-    { include = "kuflow_robotframework", from = "src" },
+    { include = "KuFlow", from = "src" },
     { include = "kuflow_rest_client", from = "src" },
 ]
 
@@ -15,12 +17,12 @@ python_dateutil = "2.8.2"
 urllib3 = "1.26.9"
 frozendict = "2.3.1"
 certifi = "certifi 2021.10.8"
+robotframework = "^5.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "5.4.3"
 black = "22.3.0"
 flake8 = "4.0.1"
-robotframework = "^5.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
