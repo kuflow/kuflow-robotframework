@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "KuFlow library for Robot Framework"
 authors = ["KuFlow S.L. <kuflow@kuflow.com>"]
 license = "MIT License"
-readme = "README.rst"
+readme = "README.md"
 
 homepage = "https://kuflow.com/"
 documentation = "https://docs.kuflow.com/"
