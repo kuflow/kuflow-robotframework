@@ -9,19 +9,21 @@ from kuflow_rest_client.model.save_element_document_command import SaveElementDo
 # TODO Homogenize versions
 __version__ = '1.0.0'
 
-# TODO move to environment
-configuration = kuflow_rest_client.Configuration(
-    host="https://api.sandbox.kuflow.com/v1.0",
-    username="",
-    password="",
-)
-
-logger = logging.getLogger(__name__)
-
 
 class KuFlow:
     ROBOT_LIBRARY_VERSION = __version__
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
+
+    def __init__(self) -> None:
+        self.logger = logging.getLogger(__name__)
+        self._client_configuration = None
+
+    def set_client_authentication(self, endpoint, identifier, token):
+        self._client_configuration = kuflow_rest_client.Configuration(
+            host=endpoint,
+            username=identifier,
+            password=token,
+        )
 
     def append_log_message(self, task_id: str, message: str, level=LogLevel.INFO):
         """Add a log entry to the task
@@ -128,7 +130,7 @@ class KuFlow:
         self._do_save_element_request(task_id, body)
 
     def _do_save_element_document_request(self, task_id, body):
-        with kuflow_rest_client.ApiClient(configuration) as api_client:
+        with kuflow_rest_client.ApiClient(self._client_configuration) as api_client:
             api_instance = task_api.TaskApi(api_client)
 
             path_params = {
@@ -141,11 +143,11 @@ class KuFlow:
                     body=body,
                 )
             except kuflow_rest_client.ApiException as e:
-                logger.error("Exception when calling KuFlow->TaskApi->actions_save_element_document: %s\n" % e)
+                self.logger.error("Exception when calling KuFlow->TaskApi->actions_save_element_document: %s\n" % e)
                 raise e
 
     def _do_append_log_request(self, task_id, body):
-        with kuflow_rest_client.ApiClient(configuration) as api_client:
+        with kuflow_rest_client.ApiClient(self._client_configuration) as api_client:
             api_instance = task_api.TaskApi(api_client)
 
             path_params = {
@@ -159,11 +161,11 @@ class KuFlow:
                 )
 
             except kuflow_rest_client.ApiException as e:
-                logger.error("Exception when calling KuFlow->TaskApi->actions_append_log: %s\n" % e)
+                self.logger.error("Exception when calling KuFlow->TaskApi->actions_append_log: %s\n" % e)
                 raise e
 
     def _do_save_element_request(self, task_id, body):
-        with kuflow_rest_client.ApiClient(configuration) as api_client:
+        with kuflow_rest_client.ApiClient(self._client_configuration) as api_client:
             api_instance = task_api.TaskApi(api_client)
 
             path_params = {
@@ -177,5 +179,5 @@ class KuFlow:
                 )
 
             except kuflow_rest_client.ApiException as e:
-                logger.error("Exception when calling TaskApi->actions_save_element: %s\n" % e)
+                self.logger.error("Exception when calling TaskApi->actions_save_element: %s\n" % e)
                 raise e
