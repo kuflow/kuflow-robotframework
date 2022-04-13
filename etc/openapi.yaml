@@ -407,9 +407,9 @@ paths:
               required:
                 - json
                 - file
-            # encoding:
-            #   file:
-            #     contentType: image/*, application/pdf
+            encoding:
+              file:
+                contentType: image/*, application/pdf
       responses:
         "200":
           description: Task with element filled
