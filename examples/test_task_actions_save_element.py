@@ -14,12 +14,12 @@ with kuflow_rest_client.ApiClient(configuration) as api_client:
     api_instance = task_api.TaskApi(api_client)
 
     path_params = {
-        'id': "6c09357e-6a06-3304-8592-4179a8bfd408",
+        'id': "eef6d86f-93d7-4c7c-85bd-948bc7c95720",
     }
 
     time = time.strftime('%a, %d %b %Y %H:%M:%S %Z(%z)')
 
-    elementValueOne = {"value": "Example Value " + time}
+    elementValueOne = {"value": "Example Value " + time, "valid": False}
     # SINGLE ELEMENT
     body_single = ElementValueOrArrayValue(
         code="FIELD",
