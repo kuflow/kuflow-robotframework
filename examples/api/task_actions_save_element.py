@@ -2,7 +2,9 @@ import kuflow_rest_client
 import time
 
 from kuflow_rest_client.api import task_api
-from kuflow_rest_client.model.element_value_or_array_value import ElementValueOrArrayValue
+from kuflow_rest_client.model.element_value_or_array_value import (
+    ElementValueOrArrayValue,
+)
 
 configuration = kuflow_rest_client.Configuration(
     host="https://api.kuflow.com/v1.0",
@@ -14,10 +16,10 @@ with kuflow_rest_client.ApiClient(configuration) as api_client:
     api_instance = task_api.TaskApi(api_client)
 
     path_params = {
-        'id': "eef6d86f-93d7-4c7c-85bd-948bc7c95720",
+        "id": "eef6d86f-93d7-4c7c-85bd-948bc7c95720",
     }
 
-    time = time.strftime('%a, %d %b %Y %H:%M:%S %Z(%z)')
+    time = time.strftime("%a, %d %b %Y %H:%M:%S %Z(%z)")
 
     elementValueOne = {"value": "Example Value " + time, "valid": False}
     # SINGLE ELEMENT

@@ -1,7 +1,8 @@
 import kuflow_rest_client
 from kuflow_rest_client.api import task_api
-from kuflow_rest_client.model.save_element_document_command import \
-    SaveElementDocumentCommand
+from kuflow_rest_client.model.save_element_document_command import (
+    SaveElementDocumentCommand,
+)
 
 configuration = kuflow_rest_client.Configuration(
     host="https://api.kuflow.com/v1.0",

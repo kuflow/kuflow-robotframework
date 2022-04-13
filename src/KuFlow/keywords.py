@@ -1,15 +1,18 @@
 import logging
 import kuflow_rest_client
 from kuflow_rest_client.api import task_api
-from kuflow_rest_client.model.element_value_or_array_value import ElementValueOrArrayValue
+from kuflow_rest_client.model.element_value_or_array_value import (
+    ElementValueOrArrayValue,
+)
 from kuflow_rest_client.model.log import Log
 from kuflow_rest_client.model.log_level import LogLevel
-from kuflow_rest_client.model.save_element_document_command import SaveElementDocumentCommand
+from kuflow_rest_client.model.save_element_document_command import (
+    SaveElementDocumentCommand,
+)
 from robot.api.deco import keyword
 
 
 class Keywords:
-
     def __init__(self) -> None:
         self.logger = logging.getLogger(__name__)
         self._client_configuration = None
@@ -144,7 +147,10 @@ class Keywords:
                     body=body,
                 )
             except kuflow_rest_client.ApiException as e:
-                self.logger.error("Exception when calling KuFlow->TaskApi->actions_save_element_document: %s\n" % e)
+                self.logger.error(
+                    "Exception when calling KuFlow->TaskApi->actions_save_element_document: %s\n"
+                    % e
+                )
                 raise e
 
     def _do_append_log_request(self, task_id, body):
@@ -162,7 +168,10 @@ class Keywords:
                 )
 
             except kuflow_rest_client.ApiException as e:
-                self.logger.error("Exception when calling KuFlow->TaskApi->actions_append_log: %s\n" % e)
+                self.logger.error(
+                    "Exception when calling KuFlow->TaskApi->actions_append_log: %s\n"
+                    % e
+                )
                 raise e
 
     def _do_save_element_request(self, task_id, body):
@@ -170,7 +179,7 @@ class Keywords:
             api_instance = task_api.TaskApi(api_client)
 
             path_params = {
-                'id': task_id,
+                "id": task_id,
             }
 
             try:
@@ -180,5 +189,7 @@ class Keywords:
                 )
 
             except kuflow_rest_client.ApiException as e:
-                self.logger.error("Exception when calling TaskApi->actions_save_element: %s\n" % e)
+                self.logger.error(
+                    "Exception when calling TaskApi->actions_save_element: %s\n" % e
+                )
                 raise e
