@@ -7,6 +7,7 @@
   },
   "// 1": "IMPORTANT: 'openapi' script requires JAVA 11 (JAVA 17 not supported)",
   "scripts": {
+    "license": "poetry run licenseheaders -v -v -s etc/licenseheaders/custom-settings.json -t LICENSE -d src",
     "format": "poetry run black",
     "format:kuflow_rest_client": "poetry run black src/kuflow_rest_client",
     "openapi": "openapi-generator-cli generate -i etc/openapi-min.yaml -o src -g python-experimental --additional-properties=generateSourceCodeOnly=true,packageName=kuflow_rest_client,packageVersion=0.1.0,hideGenerationTimestamp=true",

@@ -1,0 +1,14 @@
+{
+    "python": {
+        "extensions": [".py"],
+        "keepFirst": "^#!|^# +pylint|^# +-\\*-|^# +coding|^# +encoding|^# +type|^# +flake8",
+        "blockCommentStartPattern": "",
+        "blockCommentEndPattern": "",
+        "lineCommentStartPattern": "^\\s*#",
+        "lineCommentEndPattern": "",
+        "headerStartLine": "#\n",
+        "headerEndLine": "#\n\n",
+        "headerLinePrefix": "# ",
+        "headerLineSuffix": ""
+    }
+}
