@@ -88,3 +88,9 @@ node_modules/
 npm-debug.log.*
 /.awcache/*
 /.cache-loader/*
+
+######################
+# Others
+######################
+.env
+.npmrc
