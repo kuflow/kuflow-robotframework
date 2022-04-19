@@ -42,6 +42,15 @@ class Keywords:
 
     @keyword(tags=("settings",))
     def set_client_authentication(self, endpoint, identifier, token):
+        """Configure the client authentication in order to execute keywords against Rest API.
+
+        Before using any other KuFlow Keyword, this one must be called.
+
+        Example:
+        | Set Client Authentication | %{KUFLOW_API_ENDPOINT} | %{KUFLOW_APPLICATION_IDENTIFIER} | %{KUFLOW_APPLICATION_TOKEN}
+        =>
+        | Set Client Authentication | https://api.kuflow.com/v1.0 | identifier | token
+        """
         self._client_configuration = kuflow_rest_client.Configuration(
             host=endpoint,
             username=identifier,
