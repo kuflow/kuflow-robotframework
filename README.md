@@ -1,6 +1,6 @@
-<!--[![MIT](https://img.shields.io/github/license/kuflow/kuflow-robotframework?label=License)](https://github.com/kuflow/kuflow-robotframework/blob/master/LICENSE)-->
-<!-- [![Python 3.9+](https://img.shields.io/pypi/pyversions/kuflow-robotframework.svg)](https://pypi.org/project/kuflow-robotframework) -->
-<!-- [![PyPI](https://img.shields.io/pypi/v/kuflow-robotframework.svg)](https://pypi.org/project/kuflow-robotframework) -->
+[![MIT](https://img.shields.io/github/license/kuflow/kuflow-robotframework?label=License)](https://github.com/kuflow/kuflow-robotframework/blob/master/LICENSE)
+[![Python 3.9+](https://img.shields.io/pypi/pyversions/kuflow-robotframework.svg)](https://pypi.org/project/kuflow-robotframework)
+[![PyPI](https://img.shields.io/pypi/v/kuflow-robotframework.svg)](https://pypi.org/project/kuflow-robotframework)
 
 
 # KuFlow Robot Framework
