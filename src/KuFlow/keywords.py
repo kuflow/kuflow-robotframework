@@ -21,9 +21,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.#
 
+
 import logging
 import kuflow_rest_client
 from kuflow_rest_client.api import task_api
+from kuflow_rest_client.model.delete_element_command import DeleteElementCommand
+from kuflow_rest_client.model.delete_element_document_command import DeleteElementDocumentCommand
 from kuflow_rest_client.model.element_value_or_array_value import (
     ElementValueOrArrayValue,
 )
@@ -121,7 +124,6 @@ class Keywords:
         | Save Element | d9729dc3-10ee-4ed9-91ca-c10e6a6d13ec | ELEMENT_KEY | My value | ${False}
         | Save Element | d9729dc3-10ee-4ed9-91ca-c10e6a6d13ec | ELEMENT_KEY | 123
         | Save Element | d9729dc3-10ee-4ed9-91ca-c10e6a6d13ec | ELEMENT_KEY | {}
-
         """
         body = ElementValueOrArrayValue(
             code=code,
@@ -166,16 +168,45 @@ class Keywords:
         self._do_save_element_request(task_id, body)
 
     @keyword()
-    def delete_element_document(self, task_id, code, source_values: list):
+    def delete_element_document(self, task_id, document_id):
         """Delete an element document value
+
+        Allow to delete a specific document from an element of document type using its id.
+
+        Note: If it is a multiple item, it will only delete the specified document. If it is a single element,
+        in addition to the document, it will also delete the element.
+
+        Example:
+        | Delete Element Document | ${TASK_ID} | ${CODE}
+        =>
+        | Delete Element Document | d9729dc3-10ee-4ed9-91ca-c10e6a6d13ec | ELEMENT_KEY
         """
-        pass
+
+        body = DeleteElementDocumentCommand(
+            documentId=document_id,
+        )
+
+        self._do_delete_element_document(task_id, body)
 
     @keyword()
-    def delete_element(self, task_id, code, source_values: list):
+    def delete_element(self, task_id, code):
         """Delete an element by code
+
+        Allow to delete task element by specifying the item definition code.
+
+        Remove all values of the selected element.
+
+        Example:
+        | Delete Element | ${TASK_ID} | ${CODE}
+        =>
+        | Delete Element | d9729dc3-10ee-4ed9-91ca-c10e6a6d13ec | ELEMENT_KEY
         """
-        pass
+
+        body = DeleteElementCommand(
+            code=code,
+        )
+
+        self._do_delete_element(task_id, body)
 
     def _do_save_element_document_request(self, task_id, body):
         with kuflow_rest_client.ApiClient(self._client_configuration) as api_client:
@@ -235,5 +266,47 @@ class Keywords:
             except kuflow_rest_client.ApiException as e:
                 self.logger.error(
                     "Exception when calling TaskApi->actions_save_element: %s\n" % e
+                )
+                raise e
+
+    def _do_delete_element_document(self, task_id, body):
+        with kuflow_rest_client.ApiClient(self._client_configuration) as api_client:
+            api_instance = task_api.TaskApi(api_client)
+
+            path_params = {
+                "id": task_id,
+            }
+
+            try:
+                api_instance.actions_delete_document(
+                    path_params=path_params,
+                    body=body,
+                )
+
+            except kuflow_rest_client.ApiException as e:
+                self.logger.error(
+                    "Exception when calling KuFlow->TaskApi->actions_delete_document: %s\n"
+                    % e
+                )
+                raise e
+
+    def _do_delete_element(self, task_id, body):
+        with kuflow_rest_client.ApiClient(self._client_configuration) as api_client:
+            api_instance = task_api.TaskApi(api_client)
+
+            path_params = {
+                "id": task_id,
+            }
+
+            try:
+                api_instance.actions_delete_element(
+                    path_params=path_params,
+                    body=body,
+                )
+
+            except kuflow_rest_client.ApiException as e:
+                self.logger.error(
+                    "Exception when calling KuFlow->TaskApi->actions_delete_element: %s\n"
+                    % e
                 )
                 raise e

@@ -1494,7 +1494,6 @@ class RequestBody(StyleFormSerializer):
                     fields.append(request_field)
             else:
                 request_field = self.__multipart_form_item(key=key, value=value)
-                # request_field.make_multipart(content_type="application/json")
                 fields.append(request_field)
 
         return dict(fields=tuple(fields))

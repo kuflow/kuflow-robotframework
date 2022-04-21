@@ -33,6 +33,8 @@ import kuflow_rest_client
 from pprint import pprint
 from kuflow_rest_client.api import task_api
 from kuflow_rest_client.model.default_error import DefaultError
+from kuflow_rest_client.model.delete_element_command import DeleteElementCommand
+from kuflow_rest_client.model.delete_element_document_command import DeleteElementDocumentCommand
 from kuflow_rest_client.model.element_value_or_array_value import ElementValueOrArrayValue
 from kuflow_rest_client.model.log import Log
 from kuflow_rest_client.model.save_element_document_command import SaveElementDocumentCommand
@@ -81,6 +83,8 @@ All URIs are relative to *https://api.kuflow.com/v1.0*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *TaskApi* | [**actions_append_log**](kuflow_rest_client/docs/TaskApi.md#actions_append_log) | **POST** /tasks/{id}/~actions/append-log | Append a log to the task
+*TaskApi* | [**actions_delete_document**](kuflow_rest_client/docs/TaskApi.md#actions_delete_document) | **POST** /tasks/{id}/~actions/delete-element-document | Delete an element document value
+*TaskApi* | [**actions_delete_element**](kuflow_rest_client/docs/TaskApi.md#actions_delete_element) | **POST** /tasks/{id}/~actions/delete-element | Delete an element by code
 *TaskApi* | [**actions_save_element**](kuflow_rest_client/docs/TaskApi.md#actions_save_element) | **POST** /tasks/{id}/~actions/save-element | Save an element
 *TaskApi* | [**actions_save_element_document**](kuflow_rest_client/docs/TaskApi.md#actions_save_element_document) | **POST** /tasks/{id}/~actions/save-element-document | Save an element document
 
@@ -89,6 +93,8 @@ Class | Method | HTTP request | Description
  - [AbstractAudited](kuflow_rest_client/docs/AbstractAudited.md)
  - [DefaultError](kuflow_rest_client/docs/DefaultError.md)
  - [DefaultErrorInfo](kuflow_rest_client/docs/DefaultErrorInfo.md)
+ - [DeleteElementCommand](kuflow_rest_client/docs/DeleteElementCommand.md)
+ - [DeleteElementDocumentCommand](kuflow_rest_client/docs/DeleteElementDocumentCommand.md)
  - [ElementValueDocument](kuflow_rest_client/docs/ElementValueDocument.md)
  - [ElementValueOrArrayValue](kuflow_rest_client/docs/ElementValueOrArrayValue.md)
  - [Log](kuflow_rest_client/docs/Log.md)
