@@ -25,7 +25,13 @@ List of available keywords:
 
 > Add a log entry to the task
 
+#### Delete Element Document
 
+> Allow to delete a specific document from an element of document type using its id.
+
+#### Delete Element 
+
+> Allow to delete task element by specifying the item definition code.
 
 ## Documentation
 
