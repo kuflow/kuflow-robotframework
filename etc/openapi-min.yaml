@@ -123,6 +123,62 @@ paths:
               schema:
                 $ref: "#/components/schemas/Task"
 
+  /tasks/{id}/~actions/delete-element:
+    post:
+      summary: Delete an element by code
+      description: |
+        Allow to delete task element by specifying the item definition code.
+
+        Remove all the element values.
+      operationId: actionsDeleteElement
+      tags:
+        - task
+      parameters:
+        - $ref: "#/components/parameters/IdPathParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteElementCommand"
+      responses:
+        "200":
+          description: Task elements deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        default:
+          $ref: "#/components/responses/DefaultError"
+
+  /tasks/{id}/~actions/delete-element-document:
+    post:
+      summary: Delete an element document value
+      description: |
+        Allow to delete a specific document from an element of document type using its id.
+
+        Note: If it is a multiple item, it will only delete the specified document. If it is a single element, in addition to the document, it will also delete the element.
+      operationId: actionsDeleteDocument
+      tags:
+        - task
+      parameters:
+        - $ref: "#/components/parameters/IdPathParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteElementDocumentCommand"
+      responses:
+        "200":
+          description: Task elements deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        default:
+          $ref: "#/components/responses/DefaultError"
+
   /tasks/{id}/~actions/append-log:
     post:
       summary: Append a log to the task
@@ -388,6 +444,25 @@ components:
         - USER
         - APPLICATION
         - SYSTEM
+
+    DeleteElementCommand:
+      type: object
+      properties:
+        code:
+          description: Code of task element to delete
+          type: string
+      required:
+        - code
+
+    DeleteElementDocumentCommand:
+      type: object
+      properties:
+        documentId:
+          description: Document Id to delete
+          type: string
+          format: uuid
+      required:
+        - documentId
 
   responses:
     DefaultError:

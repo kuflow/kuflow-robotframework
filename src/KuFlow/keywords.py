@@ -165,6 +165,18 @@ class Keywords:
         )
         self._do_save_element_request(task_id, body)
 
+    @keyword()
+    def delete_element_document(self, task_id, code, source_values: list):
+        """Delete an element document value
+        """
+        pass
+
+    @keyword()
+    def delete_element(self, task_id, code, source_values: list):
+        """Delete an element by code
+        """
+        pass
+
     def _do_save_element_document_request(self, task_id, body):
         with kuflow_rest_client.ApiClient(self._client_configuration) as api_client:
             api_instance = task_api.TaskApi(api_client)

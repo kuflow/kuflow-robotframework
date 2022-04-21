@@ -11,6 +11,6 @@
     "format": "poetry run black",
     "format:kuflow_rest_client": "poetry run black src/kuflow_rest_client",
     "openapi": "openapi-generator-cli generate -i etc/openapi-min.yaml -o src -g python-experimental --additional-properties=generateSourceCodeOnly=true,packageName=kuflow_rest_client,packageVersion=0.1.1,hideGenerationTimestamp=true",
-    "generate": "npm run openapi && npm run format:kuflow_rest_client"
+    "generate": "npm run openapi && npm run format:kuflow_rest_client && npm run license"
   }
 }
