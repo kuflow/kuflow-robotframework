@@ -21,9 +21,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.#
 
+
 from .keywords import Keywords
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 
 
 class KuFlow(Keywords):

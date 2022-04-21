@@ -37,6 +37,12 @@ from kuflow_rest_client.api_client import ApiClient
 from kuflow_rest_client.api.task_api_endpoints.actions_append_log import (
     ActionsAppendLog,
 )
+from kuflow_rest_client.api.task_api_endpoints.actions_delete_document import (
+    ActionsDeleteDocument,
+)
+from kuflow_rest_client.api.task_api_endpoints.actions_delete_element import (
+    ActionsDeleteElement,
+)
 from kuflow_rest_client.api.task_api_endpoints.actions_save_element import (
     ActionsSaveElement,
 )
@@ -47,6 +53,8 @@ from kuflow_rest_client.api.task_api_endpoints.actions_save_element_document imp
 
 class TaskApi(
     ActionsAppendLog,
+    ActionsDeleteDocument,
+    ActionsDeleteElement,
     ActionsSaveElement,
     ActionsSaveElementDocument,
     ApiClient,

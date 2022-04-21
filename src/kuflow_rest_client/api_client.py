@@ -992,7 +992,7 @@ class ApiClient:
             self.default_headers[header_name] = header_value
         self.cookie = cookie
         # Set default User-Agent.
-        self.user_agent = "OpenAPI-Generator/0.1.1/python"
+        self.user_agent = "OpenAPI-Generator/0.2.0/python"
 
     def __enter__(self):
         return self
@@ -1494,7 +1494,6 @@ class RequestBody(StyleFormSerializer):
                     fields.append(request_field)
             else:
                 request_field = self.__multipart_form_item(key=key, value=value)
-                # request_field.make_multipart(content_type="application/json")
                 fields.append(request_field)
 
         return dict(fields=tuple(fields))

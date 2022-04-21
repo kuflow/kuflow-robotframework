@@ -38,6 +38,10 @@
 from kuflow_rest_client.model.abstract_audited import AbstractAudited
 from kuflow_rest_client.model.default_error import DefaultError
 from kuflow_rest_client.model.default_error_info import DefaultErrorInfo
+from kuflow_rest_client.model.delete_element_command import DeleteElementCommand
+from kuflow_rest_client.model.delete_element_document_command import (
+    DeleteElementDocumentCommand,
+)
 from kuflow_rest_client.model.element_value_document import ElementValueDocument
 from kuflow_rest_client.model.element_value_or_array_value import (
     ElementValueOrArrayValue,

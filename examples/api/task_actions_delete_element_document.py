@@ -24,9 +24,7 @@
 
 import kuflow_rest_client
 from kuflow_rest_client.api import task_api
-from kuflow_rest_client.model.save_element_document_command import (
-    SaveElementDocumentCommand,
-)
+from kuflow_rest_client.model.delete_element_document_command import DeleteElementDocumentCommand
 
 configuration = kuflow_rest_client.Configuration(
     host="https://api.kuflow.com/v1.0",
@@ -38,19 +36,18 @@ with kuflow_rest_client.ApiClient(configuration) as api_client:
     api_instance = task_api.TaskApi(api_client)
 
     path_params = {
-        "id": "6c09357e-6a06-3304-8592-4179a8bfd408",
+        "id": "0ccf164b-e150-328e-8a86-9d5be73972f1",
     }
-    body = dict(
-        json=SaveElementDocumentCommand(
-            code="DOC_MULTIPLE",
-        ),
-        file=open("/home/user/file.jpg", "rb"),
+
+    body = DeleteElementDocumentCommand(
+        documentId="79fdcd62-14f4-4789-8957-085297f4615a",
     )
+
     try:
-        # Save an element document
-        api_response = api_instance.actions_save_element_document(
+        # Delete an element document value
+        api_response = api_instance.actions_delete_document(
             path_params=path_params,
             body=body,
         )
     except kuflow_rest_client.ApiException as e:
-        print("Exception when calling TaskApi->actions_save_element_document: %s\n" % e)
+        print("Exception when calling TaskApi->actions_delete_document: %s\n" % e)
