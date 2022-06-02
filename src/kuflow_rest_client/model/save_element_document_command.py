@@ -22,7 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.#
 
-
 """
     KuFlow Public API
 
@@ -36,12 +35,12 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 import typing  # noqa: F401
+import functools  # noqa: F401
 
 from frozendict import frozendict  # noqa: F401
 
 import decimal  # noqa: F401
 from datetime import date, datetime  # noqa: F401
-from frozendict import frozendict  # noqa: F401
 
 from kuflow_rest_client.schemas import (  # noqa: F401
     AnyTypeSchema,
@@ -55,6 +54,7 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     Float32Schema,
     Float64Schema,
     NumberSchema,
+    UUIDSchema,
     DateSchema,
     DateTimeSchema,
     DecimalSchema,
@@ -62,7 +62,7 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     BinarySchema,
     NoneSchema,
     none_type,
-    InstantiationMetadata,
+    Configuration,
     Unset,
     unset,
     ComposedBase,
@@ -71,7 +71,12 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     NoneBase,
     StrBase,
     IntBase,
+    Int32Base,
+    Int64Base,
+    Float32Base,
+    Float64Base,
     NumberBase,
+    UUIDBase,
     DateBase,
     DateTimeBase,
     BoolBase,
@@ -90,8 +95,8 @@ class SaveElementDocumentCommand(DictSchema):
     Do not edit the class manually.
     """
 
-    id = StrSchema
-    code = StrSchema
+    id = UUIDSchema
+    code = UUIDSchema
     valid = BoolSchema
 
     def __new__(
@@ -103,7 +108,7 @@ class SaveElementDocumentCommand(DictSchema):
         id: typing.Union[id, Unset] = unset,
         code: typing.Union[code, Unset] = unset,
         valid: typing.Union[valid, Unset] = unset,
-        _instantiation_metadata: typing.Optional[InstantiationMetadata] = None,
+        _configuration: typing.Optional[Configuration] = None,
         **kwargs: typing.Type[Schema],
     ) -> "SaveElementDocumentCommand":
         return super().__new__(
@@ -112,6 +117,6 @@ class SaveElementDocumentCommand(DictSchema):
             id=id,
             code=code,
             valid=valid,
-            _instantiation_metadata=_instantiation_metadata,
+            _configuration=_configuration,
             **kwargs,
         )

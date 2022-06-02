@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "2.4.26"
+    "@openapitools/openapi-generator-cli": "2.5.1"
   },
   "// 1": "IMPORTANT: 'openapi' script requires JAVA 11 (JAVA 17 not supported)",
   "scripts": {

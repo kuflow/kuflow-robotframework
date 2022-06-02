@@ -23,7 +23,6 @@
 # SOFTWARE.#
 
 
-
 # flake8: noqa
 
 # import all models into this package
@@ -51,7 +50,6 @@ from kuflow_rest_client.model.log_level import LogLevel
 from kuflow_rest_client.model.principal import Principal
 from kuflow_rest_client.model.principal_type import PrincipalType
 from kuflow_rest_client.model.task import Task
-from kuflow_rest_client.model.task_all_of import TaskAllOf
 from kuflow_rest_client.model.task_element_value import TaskElementValue
 from kuflow_rest_client.model.task_state import TaskState
 from kuflow_rest_client.model.tasks_definition_summary import TasksDefinitionSummary

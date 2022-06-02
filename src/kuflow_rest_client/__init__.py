@@ -23,7 +23,6 @@
 # SOFTWARE.#
 
 
-
 # flake8: noqa
 
 """

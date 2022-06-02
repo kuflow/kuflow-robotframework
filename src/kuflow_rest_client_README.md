@@ -63,7 +63,7 @@ with kuflow_rest_client.ApiClient(configuration) as api_client:
     id = "id_example" # str | The resource Id
 log = Log(
         id="id_example",
-        created_at=isoparse('1970-01-01T00:00:00.00Z'),
+        created_at="1970-01-01T00:00:00.00Z",
         message="message_example",
         level=LogLevel("INFO"),
     ) # Log | 
@@ -102,7 +102,6 @@ Class | Method | HTTP request | Description
  - [Principal](kuflow_rest_client/docs/Principal.md)
  - [PrincipalType](kuflow_rest_client/docs/PrincipalType.md)
  - [Task](kuflow_rest_client/docs/Task.md)
- - [TaskAllOf](kuflow_rest_client/docs/TaskAllOf.md)
  - [TaskElementValue](kuflow_rest_client/docs/TaskElementValue.md)
  - [TaskState](kuflow_rest_client/docs/TaskState.md)
  - [TasksDefinitionSummary](kuflow_rest_client/docs/TasksDefinitionSummary.md)

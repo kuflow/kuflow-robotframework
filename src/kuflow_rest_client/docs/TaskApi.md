@@ -53,7 +53,7 @@ with kuflow_rest_client.ApiClient(configuration) as api_client:
     }
     body = Log(
         id="id_example",
-        created_at=isoparse('1970-01-01T00:00:00.00Z'),
+        created_at="1970-01-01T00:00:00.00Z",
         message="message_example",
         level=LogLevel("INFO"),
     )
@@ -105,7 +105,7 @@ Type | Description | Notes
 Code | Class | Description
 ------------- | ------------- | -------------
 n/a | api_client.ApiResponseWithoutDeserialization | When skip_deserialization is True this response is returned
-200 | ApiResponseFor200 | Log entry added 
+200 | ApiResponseFor200 | Log entry added
 
 #### ApiResponseFor200
 Name | Type | Description  | Notes
@@ -222,8 +222,8 @@ Type | Description | Notes
 Code | Class | Description
 ------------- | ------------- | -------------
 n/a | api_client.ApiResponseWithoutDeserialization | When skip_deserialization is True this response is returned
-200 | ApiResponseFor200 | Task elements deleted 
-default | ApiResponseForDefault | Unexpected error 
+200 | ApiResponseFor200 | Task elements deleted
+default | ApiResponseForDefault | Unexpected error
 
 #### ApiResponseFor200
 Name | Type | Description  | Notes
@@ -353,8 +353,8 @@ Type | Description | Notes
 Code | Class | Description
 ------------- | ------------- | -------------
 n/a | api_client.ApiResponseWithoutDeserialization | When skip_deserialization is True this response is returned
-200 | ApiResponseFor200 | Task elements deleted 
-default | ApiResponseForDefault | Unexpected error 
+200 | ApiResponseFor200 | Task elements deleted
+default | ApiResponseForDefault | Unexpected error
 
 #### ApiResponseFor200
 Name | Type | Description  | Notes
@@ -435,7 +435,7 @@ with kuflow_rest_client.ApiClient(configuration) as api_client:
     }
     body = ElementValueOrArrayValue(
         code="code_example",
-        value=,
+        value=None,
     )
     try:
         # Save an element
@@ -485,8 +485,8 @@ Type | Description | Notes
 Code | Class | Description
 ------------- | ------------- | -------------
 n/a | api_client.ApiResponseWithoutDeserialization | When skip_deserialization is True this response is returned
-200 | ApiResponseFor200 | Task with element filled 
-default | ApiResponseForDefault | Unexpected error 
+200 | ApiResponseFor200 | Task with element filled
+default | ApiResponseForDefault | Unexpected error
 
 #### ApiResponseFor200
 Name | Type | Description  | Notes
@@ -636,7 +636,7 @@ Type | Description | Notes
 Code | Class | Description
 ------------- | ------------- | -------------
 n/a | api_client.ApiResponseWithoutDeserialization | When skip_deserialization is True this response is returned
-200 | ApiResponseFor200 | Task with element filled 
+200 | ApiResponseFor200 | Task with element filled
 
 #### ApiResponseFor200
 Name | Type | Description  | Notes

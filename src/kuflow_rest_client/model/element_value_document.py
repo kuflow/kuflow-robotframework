@@ -22,7 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.#
 
-
 """
     KuFlow Public API
 
@@ -36,6 +35,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 import typing  # noqa: F401
+import functools  # noqa: F401
 
 from frozendict import frozendict  # noqa: F401
 
@@ -55,6 +55,7 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     Float32Schema,
     Float64Schema,
     NumberSchema,
+    UUIDSchema,
     DateSchema,
     DateTimeSchema,
     DecimalSchema,
@@ -62,7 +63,7 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     BinarySchema,
     NoneSchema,
     none_type,
-    InstantiationMetadata,
+    Configuration,
     Unset,
     unset,
     ComposedBase,
@@ -71,7 +72,12 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     NoneBase,
     StrBase,
     IntBase,
+    Int32Base,
+    Int64Base,
+    Float32Base,
+    Float64Base,
     NumberBase,
+    UUIDBase,
     DateBase,
     DateTimeBase,
     BoolBase,
@@ -90,7 +96,7 @@ class ElementValueDocument(DictSchema):
     Do not edit the class manually.
     """
 
-    id = StrSchema
+    id = UUIDSchema
     name = StrSchema
     contentPath = StrSchema
     contentType = StrSchema
@@ -107,7 +113,7 @@ class ElementValueDocument(DictSchema):
         contentPath: typing.Union[contentPath, Unset] = unset,
         contentType: typing.Union[contentType, Unset] = unset,
         contentLength: typing.Union[contentLength, Unset] = unset,
-        _instantiation_metadata: typing.Optional[InstantiationMetadata] = None,
+        _configuration: typing.Optional[Configuration] = None,
         **kwargs: typing.Type[Schema],
     ) -> "ElementValueDocument":
         return super().__new__(
@@ -118,6 +124,6 @@ class ElementValueDocument(DictSchema):
             contentPath=contentPath,
             contentType=contentType,
             contentLength=contentLength,
-            _instantiation_metadata=_instantiation_metadata,
+            _configuration=_configuration,
             **kwargs,
         )

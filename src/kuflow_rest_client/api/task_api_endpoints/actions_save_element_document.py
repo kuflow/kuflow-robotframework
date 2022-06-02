@@ -22,7 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.#
 
-
 """
 
 
@@ -34,6 +33,7 @@ import re  # noqa: F401
 import sys  # noqa: F401
 import typing
 import urllib3
+import functools  # noqa: F401
 from urllib3._collections import HTTPHeaderDict
 
 from kuflow_rest_client import api_client, exceptions
@@ -53,6 +53,7 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     Float32Schema,
     Float64Schema,
     NumberSchema,
+    UUIDSchema,
     DateSchema,
     DateTimeSchema,
     DecimalSchema,
@@ -60,7 +61,7 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     BinarySchema,
     NoneSchema,
     none_type,
-    InstantiationMetadata,
+    Configuration,
     Unset,
     unset,
     ComposedBase,
@@ -69,7 +70,12 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     NoneBase,
     StrBase,
     IntBase,
+    Int32Base,
+    Int64Base,
+    Float32Base,
+    Float64Base,
     NumberBase,
+    UUIDBase,
     DateBase,
     DateTimeBase,
     BoolBase,
@@ -86,7 +92,7 @@ from kuflow_rest_client.model.save_element_document_command import (
 from kuflow_rest_client.model.task import Task
 
 # path params
-IdSchema = StrSchema
+IdSchema = UUIDSchema
 RequestRequiredPathParams = typing.TypedDict(
     "RequestRequiredPathParams",
     {
@@ -127,13 +133,13 @@ class SchemaForRequestBodyMultipartFormData(DictSchema):
             dict,
             frozendict,
         ],
-        _instantiation_metadata: typing.Optional[InstantiationMetadata] = None,
+        _configuration: typing.Optional[Configuration] = None,
         **kwargs: typing.Type[Schema],
     ) -> "SchemaForRequestBodyMultipartFormData":
         return super().__new__(
             cls,
             *args,
-            _instantiation_metadata=_instantiation_metadata,
+            _configuration=_configuration,
             **kwargs,
         )
 

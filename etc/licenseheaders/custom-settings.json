@@ -7,7 +7,7 @@
         "lineCommentStartPattern": "^\\s*#",
         "lineCommentEndPattern": "",
         "headerStartLine": "#\n",
-        "headerEndLine": "#\n\n",
+        "headerEndLine": "#\n",
         "headerLinePrefix": "# ",
         "headerLineSuffix": ""
     }
