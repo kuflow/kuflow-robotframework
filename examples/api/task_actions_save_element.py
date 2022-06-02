@@ -26,39 +26,37 @@ import kuflow_rest_client
 import time
 
 from kuflow_rest_client.api import task_api
-from kuflow_rest_client.model.element_value_or_array_value import (
-    ElementValueOrArrayValue,
-)
+from kuflow_rest_client.model.task_element_value_or_array_value import TaskTaskElementValueOrArrayValue
 
 configuration = kuflow_rest_client.Configuration(
-    host="https://api.kuflow.com/v1.0",
-    username="",
-    password="",
+    host="https://api.sandbox.kuflow.com/v1.0",
+    username="72fcb58c-5028-41e1-b4d1-417df487ade6",
+    password="#:X9qHXbU5[8cKd",
 )
 
 with kuflow_rest_client.ApiClient(configuration) as api_client:
     api_instance = task_api.TaskApi(api_client)
 
     path_params = {
-        "id": "eef6d86f-93d7-4c7c-85bd-948bc7c95720",
+        "id": "f5cea8a2-1b37-3c55-b942-a358f793e83f",
     }
 
     time = time.strftime("%a, %d %b %Y %H:%M:%S %Z(%z)")
 
     elementValueOne = {"value": "Example Value " + time, "valid": False}
     # SINGLE ELEMENT
-    body_single = ElementValueOrArrayValue(
+    body_single = TaskTaskElementValueOrArrayValue(
         code="FIELD",
-        value=ElementValueOrArrayValue.value(elementValueOne),
+        value=TaskTaskElementValueOrArrayValue.value(elementValueOne),
     )
 
     # MULTI ELEMENT
     elementValueTwo = elementValueOne.copy()
-    elementValueTwo["value"] = "Another Example" + time
+    elementValueTwo["value"] = "Another Example " + time
     valueList = [elementValueOne, elementValueTwo]
-    body_multiple = ElementValueOrArrayValue(
+    body_multiple = TaskTaskElementValueOrArrayValue(
         code="FIELD_MULTIPLE",
-        value=ElementValueOrArrayValue.value(valueList),
+        value=TaskTaskElementValueOrArrayValue.value(valueList),
     )
 
     try:

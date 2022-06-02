@@ -244,7 +244,6 @@ class Task(ComposedSchema):
                     dict,
                     frozendict,
                 ],
-                id: typing.Union[id, Unset] = unset,
                 state: typing.Union[state, Unset] = unset,
                 activityToken: typing.Union[activityToken, Unset] = unset,
                 activityResponseVersion: typing.Union[
@@ -259,7 +258,6 @@ class Task(ComposedSchema):
                 return super().__new__(
                     cls,
                     *args,
-                    id=id,
                     state=state,
                     activityToken=activityToken,
                     activityResponseVersion=activityResponseVersion,
@@ -308,6 +306,3 @@ class Task(ComposedSchema):
 
 
 from kuflow_rest_client.model.abstract_audited import AbstractAudited
-# KF: Missing import
-from kuflow_rest_client.models import *
-# KF: End Missing import

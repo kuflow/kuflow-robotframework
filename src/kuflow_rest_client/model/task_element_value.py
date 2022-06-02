@@ -112,13 +112,15 @@ class TaskElementValue(DictSchema):
             # loading
             oneOf_0 = StrSchema
             oneOf_1 = NumberSchema
-            oneOf_2 = DictSchema
+            oneOf_3 = DictSchema
             return {
                 "allOf": [],
                 "oneOf": [
                     oneOf_0,
                     oneOf_1,
-                    oneOf_2,
+                    TaskElementValueDocument,
+                    oneOf_3,
+                    TaskElementValuePrincipal,
                 ],
                 "anyOf": [],
                 "not": None,
@@ -169,3 +171,11 @@ class TaskElementValue(DictSchema):
             _configuration=_configuration,
             **kwargs,
         )
+
+
+from kuflow_rest_client.model.task_element_value_document import (
+    TaskElementValueDocument,
+)
+from kuflow_rest_client.model.task_element_value_principal import (
+    TaskElementValuePrincipal,
+)

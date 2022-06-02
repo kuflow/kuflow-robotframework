@@ -86,9 +86,8 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     _SchemaEnumMaker,
 )
 
-from kuflow_rest_client.model.default_error import DefaultError
-from kuflow_rest_client.model.task_element_value_or_array_value import (
-    TaskElementValueOrArrayValue,
+from kuflow_rest_client.model.save_element_value_document_command import (
+    SaveElementValueDocumentCommand,
 )
 from kuflow_rest_client.model.task import Task
 
@@ -116,18 +115,43 @@ request_path_id = api_client.PathParameter(
     required=True,
 )
 # body param
-SchemaForRequestBodyApplicationJson = TaskElementValueOrArrayValue
 
 
-request_body_task_element_value_or_array_value = api_client.RequestBody(
+class SchemaForRequestBodyMultipartFormData(DictSchema):
+    _required_property_names = set(())
+
+    @classmethod
+    @property
+    def json(cls) -> typing.Type["SaveElementValueDocumentCommand"]:
+        return SaveElementValueDocumentCommand
+
+    file = BinarySchema
+
+    def __new__(
+        cls,
+        *args: typing.Union[
+            dict,
+            frozendict,
+        ],
+        _configuration: typing.Optional[Configuration] = None,
+        **kwargs: typing.Type[Schema],
+    ) -> "SchemaForRequestBodyMultipartFormData":
+        return super().__new__(
+            cls,
+            *args,
+            _configuration=_configuration,
+            **kwargs,
+        )
+
+
+request_body_body = api_client.RequestBody(
     content={
-        "application/json": api_client.MediaType(
-            schema=SchemaForRequestBodyApplicationJson
+        "multipart/form-data": api_client.MediaType(
+            schema=SchemaForRequestBodyMultipartFormData
         ),
     },
-    required=True,
 )
-_path = "/tasks/{id}/~actions/save-element"
+_path = "/tasks/{id}/~actions/save-element-value-document"
 _method = "POST"
 _auth = [
     "BasicAuth",
@@ -152,50 +176,25 @@ _response_for_200 = api_client.OpenApiResponse(
         ),
     },
 )
-SchemaFor0ResponseBodyApplicationJson = DefaultError
-
-
-@dataclass
-class ApiResponseForDefault(api_client.ApiResponse):
-    response: urllib3.HTTPResponse
-    body: typing.Union[
-        SchemaFor0ResponseBodyApplicationJson,
-    ]
-    headers: Unset = unset
-
-
-_response_for_default = api_client.OpenApiResponse(
-    response_cls=ApiResponseForDefault,
-    content={
-        "application/json": api_client.MediaType(
-            schema=SchemaFor0ResponseBodyApplicationJson
-        ),
-    },
-)
 _status_code_to_response = {
     "200": _response_for_200,
-    "default": _response_for_default,
 }
 _all_accept_content_types = ("application/json",)
 
 
-class ActionsSaveElement(api_client.Api):
-    def actions_save_element(
+class ActionsSaveElementValueDocument(api_client.Api):
+    def actions_save_element_value_document(
         self: api_client.Api,
-        body: typing.Union[SchemaForRequestBodyApplicationJson],
+        body: typing.Union[SchemaForRequestBodyMultipartFormData, Unset] = unset,
         path_params: RequestPathParams = frozendict(),
-        content_type: str = "application/json",
+        content_type: str = "multipart/form-data",
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
-    ) -> typing.Union[
-        ApiResponseFor200,
-        ApiResponseForDefault,
-        api_client.ApiResponseWithoutDeserialization,
-    ]:
+    ) -> typing.Union[ApiResponseFor200, api_client.ApiResponseWithoutDeserialization]:
         """
-        Save an element
+        Save an element document
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -216,20 +215,15 @@ class ActionsSaveElement(api_client.Api):
             for accept_content_type in accept_content_types:
                 _headers.add("Accept", accept_content_type)
 
-        if body is unset:
-            raise exceptions.ApiValueError(
-                "The required body parameter has an invalid value of: unset. Set a valid value instead"
-            )
         _fields = None
         _body = None
-        serialized_data = request_body_task_element_value_or_array_value.serialize(
-            body, content_type
-        )
-        _headers.add("Content-Type", content_type)
-        if "fields" in serialized_data:
-            _fields = serialized_data["fields"]
-        elif "body" in serialized_data:
-            _body = serialized_data["body"]
+        if body is not unset:
+            serialized_data = request_body_body.serialize(body, content_type)
+            _headers.add("Content-Type", content_type)
+            if "fields" in serialized_data:
+                _fields = serialized_data["fields"]
+            elif "body" in serialized_data:
+                _body = serialized_data["body"]
         response = self.api_client.call_api(
             resource_path=_path,
             method=_method,
@@ -253,15 +247,9 @@ class ActionsSaveElement(api_client.Api):
                     response, self.api_client.configuration
                 )
             else:
-                default_response = _status_code_to_response.get("default")
-                if default_response:
-                    api_response = default_response.deserialize(
-                        response, self.api_client.configuration
-                    )
-                else:
-                    api_response = api_client.ApiResponseWithoutDeserialization(
-                        response=response
-                    )
+                api_response = api_client.ApiResponseWithoutDeserialization(
+                    response=response
+                )
 
         if not 200 <= response.status <= 299:
             raise exceptions.ApiException(api_response=api_response)

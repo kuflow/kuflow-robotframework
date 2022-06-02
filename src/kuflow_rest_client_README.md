@@ -34,11 +34,11 @@ from pprint import pprint
 from kuflow_rest_client.api import task_api
 from kuflow_rest_client.model.default_error import DefaultError
 from kuflow_rest_client.model.delete_element_command import DeleteElementCommand
-from kuflow_rest_client.model.delete_element_document_command import DeleteElementDocumentCommand
-from kuflow_rest_client.model.element_value_or_array_value import ElementValueOrArrayValue
+from kuflow_rest_client.model.delete_element_value_document_command import DeleteElementValueDocumentCommand
 from kuflow_rest_client.model.log import Log
-from kuflow_rest_client.model.save_element_document_command import SaveElementDocumentCommand
+from kuflow_rest_client.model.save_element_value_document_command import SaveElementValueDocumentCommand
 from kuflow_rest_client.model.task import Task
+from kuflow_rest_client.model.task_element_value_or_array_value import TaskElementValueOrArrayValue
 # Defining the host is optional and defaults to https://api.kuflow.com/v1.0
 # See configuration.py for a list of all supported configuration parameters.
 configuration = kuflow_rest_client.Configuration(
@@ -83,10 +83,10 @@ All URIs are relative to *https://api.kuflow.com/v1.0*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *TaskApi* | [**actions_append_log**](kuflow_rest_client/docs/TaskApi.md#actions_append_log) | **POST** /tasks/{id}/~actions/append-log | Append a log to the task
-*TaskApi* | [**actions_delete_document**](kuflow_rest_client/docs/TaskApi.md#actions_delete_document) | **POST** /tasks/{id}/~actions/delete-element-document | Delete an element document value
 *TaskApi* | [**actions_delete_element**](kuflow_rest_client/docs/TaskApi.md#actions_delete_element) | **POST** /tasks/{id}/~actions/delete-element | Delete an element by code
+*TaskApi* | [**actions_delete_value_document**](kuflow_rest_client/docs/TaskApi.md#actions_delete_value_document) | **POST** /tasks/{id}/~actions/delete-element-value-document | Delete an element document value
 *TaskApi* | [**actions_save_element**](kuflow_rest_client/docs/TaskApi.md#actions_save_element) | **POST** /tasks/{id}/~actions/save-element | Save an element
-*TaskApi* | [**actions_save_element_document**](kuflow_rest_client/docs/TaskApi.md#actions_save_element_document) | **POST** /tasks/{id}/~actions/save-element-document | Save an element document
+*TaskApi* | [**actions_save_element_value_document**](kuflow_rest_client/docs/TaskApi.md#actions_save_element_value_document) | **POST** /tasks/{id}/~actions/save-element-value-document | Save an element document
 
 ## Documentation For Models
 
@@ -94,15 +94,16 @@ Class | Method | HTTP request | Description
  - [DefaultError](kuflow_rest_client/docs/DefaultError.md)
  - [DefaultErrorInfo](kuflow_rest_client/docs/DefaultErrorInfo.md)
  - [DeleteElementCommand](kuflow_rest_client/docs/DeleteElementCommand.md)
- - [DeleteElementDocumentCommand](kuflow_rest_client/docs/DeleteElementDocumentCommand.md)
- - [ElementValueDocument](kuflow_rest_client/docs/ElementValueDocument.md)
- - [ElementValueOrArrayValue](kuflow_rest_client/docs/ElementValueOrArrayValue.md)
+ - [DeleteElementValueDocumentCommand](kuflow_rest_client/docs/DeleteElementValueDocumentCommand.md)
  - [Log](kuflow_rest_client/docs/Log.md)
  - [LogLevel](kuflow_rest_client/docs/LogLevel.md)
  - [Principal](kuflow_rest_client/docs/Principal.md)
  - [PrincipalType](kuflow_rest_client/docs/PrincipalType.md)
  - [Task](kuflow_rest_client/docs/Task.md)
  - [TaskElementValue](kuflow_rest_client/docs/TaskElementValue.md)
+ - [TaskElementValueDocument](kuflow_rest_client/docs/TaskElementValueDocument.md)
+ - [TaskElementValueOrArrayValue](kuflow_rest_client/docs/TaskElementValueOrArrayValue.md)
+ - [TaskElementValuePrincipal](kuflow_rest_client/docs/TaskElementValuePrincipal.md)
  - [TaskState](kuflow_rest_client/docs/TaskState.md)
  - [TasksDefinitionSummary](kuflow_rest_client/docs/TasksDefinitionSummary.md)
 

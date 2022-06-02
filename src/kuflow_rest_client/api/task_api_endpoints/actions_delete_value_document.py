@@ -87,8 +87,8 @@ from kuflow_rest_client.schemas import (  # noqa: F401
 )
 
 from kuflow_rest_client.model.default_error import DefaultError
-from kuflow_rest_client.model.task_element_value_or_array_value import (
-    TaskElementValueOrArrayValue,
+from kuflow_rest_client.model.delete_element_value_document_command import (
+    DeleteElementValueDocumentCommand,
 )
 from kuflow_rest_client.model.task import Task
 
@@ -116,10 +116,10 @@ request_path_id = api_client.PathParameter(
     required=True,
 )
 # body param
-SchemaForRequestBodyApplicationJson = TaskElementValueOrArrayValue
+SchemaForRequestBodyApplicationJson = DeleteElementValueDocumentCommand
 
 
-request_body_task_element_value_or_array_value = api_client.RequestBody(
+request_body_delete_element_value_document_command = api_client.RequestBody(
     content={
         "application/json": api_client.MediaType(
             schema=SchemaForRequestBodyApplicationJson
@@ -127,7 +127,7 @@ request_body_task_element_value_or_array_value = api_client.RequestBody(
     },
     required=True,
 )
-_path = "/tasks/{id}/~actions/save-element"
+_path = "/tasks/{id}/~actions/delete-element-value-document"
 _method = "POST"
 _auth = [
     "BasicAuth",
@@ -179,8 +179,8 @@ _status_code_to_response = {
 _all_accept_content_types = ("application/json",)
 
 
-class ActionsSaveElement(api_client.Api):
-    def actions_save_element(
+class ActionsDeleteValueDocument(api_client.Api):
+    def actions_delete_value_document(
         self: api_client.Api,
         body: typing.Union[SchemaForRequestBodyApplicationJson],
         path_params: RequestPathParams = frozendict(),
@@ -195,7 +195,7 @@ class ActionsSaveElement(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]:
         """
-        Save an element
+        Delete an element document value
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -222,7 +222,7 @@ class ActionsSaveElement(api_client.Api):
             )
         _fields = None
         _body = None
-        serialized_data = request_body_task_element_value_or_array_value.serialize(
+        serialized_data = request_body_delete_element_value_document_command.serialize(
             body, content_type
         )
         _headers.add("Content-Type", content_type)

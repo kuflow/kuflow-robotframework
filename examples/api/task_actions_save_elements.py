@@ -25,14 +25,12 @@
 import kuflow_rest_client
 
 from kuflow_rest_client.api import task_api
-from kuflow_rest_client.model.element_value_or_array_value import (
-    ElementValueOrArrayValue,
-)
+from kuflow_rest_client.model.task_element_value_or_array_value import TaskElementValueOrArrayValue
 
 configuration = kuflow_rest_client.Configuration(
-    host="https://api.kuflow.com/v1.0",
-    username="",
-    password="",
+    host="https://api.sandbox.kuflow.com/v1.0",
+    username="72fcb58c-5028-41e1-b4d1-417df487ade6",
+    password="#:X9qHXbU5[8cKd",
 )
 
 
@@ -41,7 +39,7 @@ def make_request(body):
         api_instance = task_api.TaskApi(api_client)
 
         path_params = {
-            "id": "458fd52a-2b61-33f0-a2fc-1e164df210c1",
+            "id": "f5cea8a2-1b37-3c55-b942-a358f793e83f",
         }
 
         try:
@@ -54,51 +52,51 @@ def make_request(body):
 
 
 # FIELD
-body = ElementValueOrArrayValue(
+body = TaskElementValueOrArrayValue(
     code="FIELD",
-    value=ElementValueOrArrayValue.value({"value": "Hi", "valid": False}),
+    value=TaskElementValueOrArrayValue.value({"value": "Hi", "valid": False}),
 )
 make_request(body)
 
 # FIELD MULTIPLE
-body = ElementValueOrArrayValue(
+body = TaskElementValueOrArrayValue(
     code="FIELD_MULTIPLE",
-    value=ElementValueOrArrayValue.value(
+    value=TaskElementValueOrArrayValue.value(
         [{"value": "Hi", "valid": False}, {"value": "Bye", "valid": False}]
     ),
 )
 make_request(body)
 
 # FORM
-body = ElementValueOrArrayValue(
-    code="FORM",
-    value=ElementValueOrArrayValue.value({"value": {"mykey": 3}, "valid": False}),
-)
-make_request(body)
+# body = TaskElementValueOrArrayValue(
+#     code="FORM",
+#     value=TaskElementValueOrArrayValue.value({"value": {"mykey": 3}, "valid": False}),
+# )
+#make_request(body)
 
 # FORM MULTIPLE
-body = ElementValueOrArrayValue(
-    code="FORM_MULTIPLE",
-    value=ElementValueOrArrayValue.value(
-        [
-            {"value": {"mykey": 3}, "valid": False},
-            {"value": {"mykey": 4}, "valid": False},
-        ]
-    ),
-)
-make_request(body)
+# body = TaskElementValueOrArrayValue(
+#     code="FORM_MULTIPLE",
+#     value=TaskElementValueOrArrayValue.value(
+#         [
+#             {"value": {"mykey": 3}, "valid": False},
+#             {"value": {"mykey": 4}, "valid": False},
+#         ]
+#     ),
+# )
+#make_request(body)
 
 # DECISION
-body = ElementValueOrArrayValue(
+body = TaskElementValueOrArrayValue(
     code="DECISION",
-    value=ElementValueOrArrayValue.value({"value": "A", "valid": False}),
+    value=TaskElementValueOrArrayValue.value({"value": "A", "valid": False}),
 )
 make_request(body)
 
 # DECISION MULTIPLE
-body = ElementValueOrArrayValue(
+body = TaskElementValueOrArrayValue(
     code="DECISION_MULTIPLE",
-    value=ElementValueOrArrayValue.value(
+    value=TaskElementValueOrArrayValue.value(
         [{"value": "A", "valid": False}, {"value": "B", "valid": False}]
     ),
 )

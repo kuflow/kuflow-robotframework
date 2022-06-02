@@ -28,16 +28,16 @@ from kuflow_rest_client.model.log import Log
 from kuflow_rest_client.model.log_level import LogLevel
 
 configuration = kuflow_rest_client.Configuration(
-    host="https://api.kuflow.com/v1.0",
-    username="",
-    password="",
+    host="https://api.sandbox.kuflow.com/v1.0",
+    username="72fcb58c-5028-41e1-b4d1-417df487ade6",
+    password="#:X9qHXbU5[8cKd",
 )
 
 with kuflow_rest_client.ApiClient(configuration) as api_client:
     api_instance = task_api.TaskApi(api_client)
 
     path_params = {
-        "id": "6c09357e-6a06-3304-8592-4179a8bfd408",
+        "id": "f5cea8a2-1b37-3c55-b942-a358f793e83f",
     }
 
     body = Log(
