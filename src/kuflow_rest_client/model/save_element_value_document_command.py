@@ -41,6 +41,7 @@ from frozendict import frozendict  # noqa: F401
 
 import decimal  # noqa: F401
 from datetime import date, datetime  # noqa: F401
+from frozendict import frozendict  # noqa: F401
 
 from kuflow_rest_client.schemas import (  # noqa: F401
     AnyTypeSchema,
@@ -95,8 +96,9 @@ class SaveElementValueDocumentCommand(DictSchema):
     Do not edit the class manually.
     """
 
+    _required_property_names = set(("code",))
     id = UUIDSchema
-    code = UUIDSchema
+    code = StrSchema
     valid = BoolSchema
 
     def __new__(

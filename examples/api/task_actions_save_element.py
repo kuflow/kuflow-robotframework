@@ -22,54 +22,133 @@
 # SOFTWARE.#
 
 
+from frozendict import frozendict
 import kuflow_rest_client
-import time
 
 from kuflow_rest_client.api import task_api
-from kuflow_rest_client.model.task_element_value_or_array_value import TaskTaskElementValueOrArrayValue
+from kuflow_rest_client.model.principal_type import PrincipalType
+from kuflow_rest_client.model.task_element_value_document import TaskElementValueDocument
+from kuflow_rest_client.model.task_element_value_document_item import TaskElementValueDocumentItem
+from kuflow_rest_client.model.task_element_value_object import TaskElementValueObject
+from kuflow_rest_client.model.task_element_value_or_array_value import TaskElementValueOrArrayValue
+from kuflow_rest_client.model.task_element_value_principal import TaskElementValuePrincipal
+from kuflow_rest_client.model.task_element_value_principal_item import TaskElementValuePrincipalItem
+from kuflow_rest_client.model.task_element_value_string import TaskElementValueString
+from kuflow_rest_client.model.task_element_value_type import TaskElementValueType
 
 configuration = kuflow_rest_client.Configuration(
-    host="https://api.sandbox.kuflow.com/v1.0",
-    username="72fcb58c-5028-41e1-b4d1-417df487ade6",
-    password="#:X9qHXbU5[8cKd",
+    host="https://api.kuflow.com/v1.0",
+    username="",
+    password="",
 )
 
-with kuflow_rest_client.ApiClient(configuration) as api_client:
-    api_instance = task_api.TaskApi(api_client)
 
-    path_params = {
-        "id": "f5cea8a2-1b37-3c55-b942-a358f793e83f",
-    }
+def make_request(body):
+    with kuflow_rest_client.ApiClient(configuration) as api_client:
+        api_instance = task_api.TaskApi(api_client)
 
-    time = time.strftime("%a, %d %b %Y %H:%M:%S %Z(%z)")
+        path_params = {
+            "id": "adc7672e-299c-3bbf-906a-bda7c255e1e4",
+        }
 
-    elementValueOne = {"value": "Example Value " + time, "valid": False}
-    # SINGLE ELEMENT
-    body_single = TaskTaskElementValueOrArrayValue(
-        code="FIELD",
-        value=TaskTaskElementValueOrArrayValue.value(elementValueOne),
-    )
+        try:
+            api_instance.actions_save_element(
+                path_params=path_params,
+                body=body,
+            )
+        except kuflow_rest_client.ApiException as e:
+            print("Exception when calling TaskApi->actions_save_element: %s\n" % e)
 
-    # MULTI ELEMENT
-    elementValueTwo = elementValueOne.copy()
-    elementValueTwo["value"] = "Another Example " + time
-    valueList = [elementValueOne, elementValueTwo]
-    body_multiple = TaskTaskElementValueOrArrayValue(
-        code="FIELD_MULTIPLE",
-        value=TaskTaskElementValueOrArrayValue.value(valueList),
-    )
 
-    try:
-        # Save an element
-        api_response = api_instance.actions_save_element(
-            path_params=path_params,
-            body=body_single,
-        )
+# FIELD
+value = TaskElementValueString(value="Hi!", type=TaskElementValueType.STRING, valid=False)
+body = TaskElementValueOrArrayValue(
+    code="FIELD",
+    value=frozendict(value),
+)
+make_request(body)
 
-        # Save an element multiple
-        api_response = api_instance.actions_save_element(
-            path_params=path_params,
-            body=body_multiple,
-        )
-    except kuflow_rest_client.ApiException as e:
-        print("Exception when calling TaskApi->actions_save_element: %s\n" % e)
+# FIELD MULTIPLE
+value = TaskElementValueString(value="Hi!", type=TaskElementValueType.STRING, valid=False)
+value_two = TaskElementValueString(value="Bye!", type=TaskElementValueType.STRING, valid=False)
+body = TaskElementValueOrArrayValue(
+    code="FIELD_MULTIPLE",
+    value=[frozendict(value), frozendict(value_two)],
+)
+make_request(body)
+
+# FORM
+value = TaskElementValueObject(value={"mykey": 1}, type=TaskElementValueType.OBJECT, valid=False)
+body = TaskElementValueOrArrayValue(
+    code="FORM",
+    value=frozendict(value),
+)
+make_request(body)
+
+# FORM MULTIPLE
+value = TaskElementValueObject(value={"mykey": "A"}, type=TaskElementValueType.OBJECT, valid=False)
+value_two = TaskElementValueObject(value={"mykey": "B"}, type=TaskElementValueType.OBJECT, valid=False)
+body = TaskElementValueOrArrayValue(
+    code="FORM_MULTIPLE",
+    value=[frozendict(value), frozendict(value_two)],
+)
+make_request(body)
+
+# DECISION
+value = TaskElementValueString(value="A", type=TaskElementValueType.STRING, valid=False)
+body = TaskElementValueOrArrayValue(
+    code="DECISION",
+    value=frozendict(value),
+)
+make_request(body)
+
+# DECISION MULTIPLE
+value = TaskElementValueString(value="A", type=TaskElementValueType.STRING, valid=False)
+value_two = TaskElementValueString(value="B", type=TaskElementValueType.STRING, valid=False)
+body = TaskElementValueOrArrayValue(
+    code="DECISION_MULTIPLE",
+    value=[frozendict(value), frozendict(value_two)],
+)
+make_request(body)
+
+
+# PRINCIPAL
+valueItem = TaskElementValuePrincipalItem(id="8934b169-c85e-4e05-9580-13ace7f267f5", type=PrincipalType.USER)
+value = TaskElementValuePrincipal(value=frozendict(valueItem), type=TaskElementValueType.PRINCIPAL, valid=False)
+body = TaskElementValueOrArrayValue(
+    code="PRINCIPAL",
+    value=frozendict(value),
+)
+make_request(body)
+
+# PRINCIPAL MULTIPLE
+valueItem = TaskElementValuePrincipalItem(id="8934b169-c85e-4e05-9580-13ace7f267f5", type=PrincipalType.USER)
+value = TaskElementValuePrincipal(value=frozendict(valueItem), type=TaskElementValueType.PRINCIPAL, valid=False)
+valueItem_two = TaskElementValuePrincipalItem(id="8934b169-c85e-4e05-9580-13ace7f267f5", type=PrincipalType.USER)
+value_two = TaskElementValuePrincipal(value=frozendict(valueItem_two), type=TaskElementValueType.PRINCIPAL, valid=False)
+body = TaskElementValueOrArrayValue(
+    code="PRINCIPAL_MULTIPLE",
+    value=[frozendict(value), frozendict(value_two)],
+)
+make_request(body)
+
+
+# DOCUMENT (By reference)
+valueItem = TaskElementValueDocumentItem(id="ku:task/adc7672e-299c-3bbf-906a-bda7c255e1e4/element-value/eb072007-cb16-4ecd-9c58-5703e862348e")
+value = TaskElementValueDocument(value=frozendict(valueItem), type=TaskElementValueType.DOCUMENT, valid=False)
+body = TaskElementValueOrArrayValue(
+    code="DOC",
+    value=frozendict(value),
+)
+make_request(body)
+
+# DOCUMENT MULTIPLE (By reference)
+valueItem = TaskElementValueDocumentItem(id="ku:task/adc7672e-299c-3bbf-906a-bda7c255e1e4/element-value/eb072007-cb16-4ecd-9c58-5703e862348e")
+value = TaskElementValueDocument(value=frozendict(valueItem), type=TaskElementValueType.DOCUMENT, valid=False)
+valueItem_two = TaskElementValueDocumentItem(id="ku:task/adc7672e-299c-3bbf-906a-bda7c255e1e4/element-value/c912d2e9-e41c-4f84-8454-720d86acfd9c")
+value_two = TaskElementValueDocument(value=frozendict(valueItem_two), type=TaskElementValueType.DOCUMENT, valid=False)
+body = TaskElementValueOrArrayValue(
+    code="DOC_MULTIPLE",
+    value=[frozendict(value), frozendict(value_two)],
+)
+make_request(body)

@@ -50,11 +50,21 @@ from kuflow_rest_client.model.task_element_value import TaskElementValue
 from kuflow_rest_client.model.task_element_value_document import (
     TaskElementValueDocument,
 )
+from kuflow_rest_client.model.task_element_value_document_item import (
+    TaskElementValueDocumentItem,
+)
+from kuflow_rest_client.model.task_element_value_number import TaskElementValueNumber
+from kuflow_rest_client.model.task_element_value_object import TaskElementValueObject
 from kuflow_rest_client.model.task_element_value_or_array_value import (
     TaskElementValueOrArrayValue,
 )
 from kuflow_rest_client.model.task_element_value_principal import (
     TaskElementValuePrincipal,
 )
+from kuflow_rest_client.model.task_element_value_principal_item import (
+    TaskElementValuePrincipalItem,
+)
+from kuflow_rest_client.model.task_element_value_string import TaskElementValueString
+from kuflow_rest_client.model.task_element_value_type import TaskElementValueType
 from kuflow_rest_client.model.task_state import TaskState
 from kuflow_rest_client.model.tasks_definition_summary import TasksDefinitionSummary

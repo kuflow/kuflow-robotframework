@@ -23,21 +23,33 @@
 
 
 import logging
+from uuid import UUID
+
+from frozendict import frozendict
 import kuflow_rest_client
 from kuflow_rest_client.api import task_api
 from kuflow_rest_client.model.delete_element_command import DeleteElementCommand
-from kuflow_rest_client.model.delete_element_document_command import (
-    DeleteElementDocumentCommand,
+from kuflow_rest_client.model.delete_element_value_document_command import (
+    DeleteElementValueDocumentCommand,
 )
-from kuflow_rest_client.model.element_value_or_array_value import (
-    ElementValueOrArrayValue,
-)
+from kuflow_rest_client.model.principal_type import PrincipalType
 from kuflow_rest_client.model.log import Log
 from kuflow_rest_client.model.log_level import LogLevel
-from kuflow_rest_client.model.save_element_document_command import (
-    SaveElementDocumentCommand,
+from kuflow_rest_client.model.save_element_value_document_command import (
+    SaveElementValueDocumentCommand,
 )
 from robot.api.deco import keyword
+
+from robot.utils import (is_list_like, is_number, is_string, type_name, is_dict_like)
+
+from kuflow_rest_client.model.task_element_value_principal_item import TaskElementValuePrincipalItem
+from kuflow_rest_client.model.task_element_value_principal import TaskElementValuePrincipal
+from kuflow_rest_client.model.task_element_value_string import TaskElementValueString
+from kuflow_rest_client.model.task_element_value_number import TaskElementValueNumber
+from kuflow_rest_client.model.task_element_value_type import TaskElementValueType
+from kuflow_rest_client.model.task_element_value_object import TaskElementValueObject
+from kuflow_rest_client.model.task_element_value_document_item import TaskElementValueDocumentItem
+from kuflow_rest_client.model.task_element_value_document import TaskElementValueDocument
 
 
 class Keywords:
@@ -100,7 +112,7 @@ class Keywords:
         """
 
         body = dict(
-            json=SaveElementDocumentCommand(
+            json=SaveElementValueDocumentCommand(
                 code=code,
             ),
             file=open(path, "rb"),
@@ -109,65 +121,101 @@ class Keywords:
         self._do_save_element_document_request(task_id, body)
 
     @keyword()
-    def save_element(self, task_id, code, value, valid=True):
+    def save_element(self, task_id, code, *value, valid=True):
         """Save a element
 
-        Allow to save an element that is not a document i.e., a field, a decision or form. If you want to add documents,
-        use the appropriate API method.
+        Allow to save an element i.e., a field, a decision, a form, a principal or document.
 
-        If values already exist for the provided element code, it replaces them with the new ones, otherwise it creates
-        them. To remove an element, use the appropriate API method.
+        If values already exist for the provided element code, it replaces them with the new ones,
+        otherwise it creates them.
+        The values of the previous elements that no longer exist will be deleted.
+        To remove an element, use the appropriate API method.
+
+        Type of arguments in keywords and KuFlow elements:
+            - String:
+                By default, plain argument in keywords are of type String.
+
+            - Number:
+                You can use the built-in keywords 'Convert To Integer', 'Convert To Number' or others
+                to pass a numeric type element.
+
+        Object Elements (aka Forms Elements in KuFlow):
+            You must pass an argument of type dictionary. You can use the built-in keyword
+            Create Dictionary or others as utilities.
+
+        Principal Elements:
+            The keyword 'Convert To Element Value Principal Item' will allow you to create a Principal
+            object that you can use as an argument.
+
+        Document Elements:
+            To save a document you need to pass a document reference using the 'id' attribute.
+            To upload a new file, please use the 'Save Element Document' keyword.
+            The keyword 'Convert To Element Value Document Item' will allow you to create a Principal
+            object that you can use as an argument. The identifier of the documents follows the following
+            format: ku:task/{taskId}/element-value/{elementValueId}
+
+        Multivalues elements:
+            For those elements that have been defined as multiple, you can pass a variable list
+            of arguments to the keyword.
+
+        Valid flag for elements:
+            When saving an element, it is possible to specify if its value is valid or not,
+            which allows it to be shown in the KuFlow UI as a validated element or not. To do this
+            you must use the Valid=Boolean parameter. Note that in RobotFramework format the default
+            type of parameters is String, so you must write Valid=${False}. By default, all items
+            are valid when saved. Similarly, for multi-evaluated elements, the value of the "valid"
+            parameter applies to all values.
 
         Example:
         | Save Element | ${TASK_ID} | ${CODE} | ${VALUE}
         | Save Element | ${TASK_ID} | ${CODE} | ${VALUE} | ${VALID}
+        | Save Element | ${TASK_ID} | ${CODE} | ${VALUE_1} | ${VALUE_2} | ${VALUE_3}
+        | Save Element | ${TASK_ID} | ${CODE} | ${VALUE_1} | ${VALUE_2} | ${VALUE_3} | ${VALID}
         =>
-        | Save Element | d9729dc3-10ee-4ed9-91ca-c10e6a6d13ec | ELEMENT_KEY | My value
-        | Save Element | d9729dc3-10ee-4ed9-91ca-c10e6a6d13ec | ELEMENT_KEY | My value | ${False}
-        | Save Element | d9729dc3-10ee-4ed9-91ca-c10e6a6d13ec | ELEMENT_KEY | 123
-        | Save Element | d9729dc3-10ee-4ed9-91ca-c10e6a6d13ec | ELEMENT_KEY | {}
+        | Save Element | d9729dc3-10ee-4ed9-91ca-c10e6a6d13ec | ELEMENT_KEY | Value
+        | Save Element | d9729dc3-10ee-4ed9-91ca-c10e6a6d13ec | ELEMENT_KEY | Value | ${False}
+        | Save Element | d9729dc3-10ee-4ed9-91ca-c10e6a6d13ec | ELEMENT_KEY | Value 1 | Value 2 | Value 3 | ${False}
+        |
+        | ${result} = Convert To Integer    123
+        | Save Element | d9729dc3-10ee-4ed9-91ca-c10e6a6d13ec | ELEMENT_KEY | ${result}
+        |
+        | ${result_one} = Convert To Integer | 123
+        | ${result_two} = Convert To Number |  123.123
+        | Save Element | ${TASK_ID} | FIELD | ${result_one} | ${result_two}
+        |
+        | ${result} = Convert To Element Value Principal Item    7dd16e94-2dac-4fca-931e-c2505baa695c
+        | Save Element | ${TASK_ID} | FIELD | ${result}
+        |
+        | &{result_one} = Create Dictionary | one_key=My Example Value One | two_key=2
+        | &{result_two} = Create Dictionary | a_key=My Example Value A | b_key=B
+        | Save Element | ${TASK_ID} | FIELD | ${result_one} | ${result_two}
+        |
+        | ${result} = Convert To Element Value Document Item    ku:task/acdca56f-b8aa-46c8-9055-8ee52810a4a9/element-value/a05f197f-a50a-46d5-bdec-29a0c020f0d7
+        | Save Element | ${TASK_ID} | FIELD | ${result}
         """
-        body = ElementValueOrArrayValue(
-            code=code,
-            value=ElementValueOrArrayValue.value({"value": value, "valid": valid}),
-        )
-        self._do_save_element_request(task_id, body)
+        print('Task:', task_id, 'Code:', code, 'Value:', value, ' valid:', valid)
+        if not is_list_like(value):
+            raise TypeError("Expected argument to be a list or list-like, "
+                            "got %s instead." % (type_name(value)))
 
-    @keyword()
-    def save_elements(self, task_id, code, source_values: list):
-        """Save a element
-
-        Allow to save an element that is not a document i.e., a field, a decision or form. If you want to add documents,
-        use the appropriate API method.
-
-        If values already exist for the provided element code, it replaces them with the new ones, otherwise it creates
-        them. To remove an element, use the appropriate API method.
-
-        source_values: It is a list of dictionaries with at least one element. Each dictionary must contain at least the
-        'value' key and optionally the 'valid' key.
-
-        The 'value' field of the dictionary will contain a value according to its specification in the process
-        definition in KuFlow.
-
-        The 'value' field of the dictionary shall contain a Boolean value.
-
-        Example:
-        | Save Elements | ${TASK_ID} | ${CODE} | ${ELEMENT_VALUES}
-        =>
-        | &{element_one} | Create Dictionary | value=My Example Value One | valid=${False}
-        | &{element_two} | Create Dictionary | value=My Example Value Two
-        | ${elements}    | Create List       | ${element_one} | ${element_two}
-        | Save Elements    d9729dc3-10ee-4ed9-91ca-c10e6a6d13ec    ELEMENT_KEY    ${elements}
-        """
         target = []
-        for source_value in source_values:
-            target.append({**source_value})
+        for v in value:
+            element = None
 
-        body = ElementValueOrArrayValue(
-            code=code,
-            value=ElementValueOrArrayValue.value(target),
-        )
-        self._do_save_element_request(task_id, body)
+            if is_string(v):
+                element = frozendict(self._convert_to_element_value_string(v, valid=valid))
+            elif is_number(v):
+                element = frozendict(self._convert_to_element_value_number(v, valid=valid))
+            elif isinstance(v, TaskElementValuePrincipalItem):
+                element = frozendict(self._convert_to_element_value_principal(v, valid=valid))
+            elif isinstance(v, TaskElementValueDocumentItem):
+                element = frozendict(self._convert_to_element_value_document(v, valid=valid))
+            elif is_dict_like(v):
+                element = frozendict(self._convert_to_element_value_object(v, valid=valid))
+            else:
+                element = frozendict(self._convert_to_element_value_string(v, valid=valid))
+
+            target.append(element)
 
     @keyword()
     def delete_element_document(self, task_id, document_id):
@@ -184,7 +232,7 @@ class Keywords:
         | Delete Element Document | d9729dc3-10ee-4ed9-91ca-c10e6a6d13ec | ELEMENT_KEY
         """
 
-        body = DeleteElementDocumentCommand(
+        body = DeleteElementValueDocumentCommand(
             documentId=document_id,
         )
 
@@ -209,6 +257,30 @@ class Keywords:
         )
 
         self._do_delete_element(task_id, body)
+
+    @keyword()
+    def convert_to_element_value_principal_item(self, id: UUID):
+        return TaskElementValuePrincipalItem(id=id, type=PrincipalType.USER)
+
+    @keyword()
+    def convert_to_element_value_document_item(self, id: UUID):
+        return TaskElementValueDocumentItem(id=id)
+
+    def _convert_to_element_value_string(self, value, valid=True):
+        return TaskElementValueString(value=value, type=TaskElementValueType.STRING, valid=valid)
+
+    def _convert_to_element_value_number(self, value, valid=True):
+        return TaskElementValueNumber(value=value, type=TaskElementValueType.NUMBER, valid=valid)
+
+    def _convert_to_element_value_object(self, value, valid=True):
+        fdict = frozendict(value)
+        return TaskElementValueObject(value=fdict, type=TaskElementValueType.OBJECT, valid=valid)
+
+    def _convert_to_element_value_principal(self, value, valid=True):
+        return TaskElementValuePrincipal(value=value, type=TaskElementValueType.PRINCIPAL, valid=valid)
+
+    def _convert_to_element_value_document(self, value, valid=True):
+        return TaskElementValueDocument(value=value, type=TaskElementValueType.DOCUMENT, valid=valid)
 
     def _do_save_element_document_request(self, task_id, body):
         with kuflow_rest_client.ApiClient(self._client_configuration) as api_client:

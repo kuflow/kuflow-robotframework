@@ -1475,16 +1475,27 @@ class RequestBody(StyleFormSerializer, JSONDetector):
                 headers={"Content-Type": "application/octet-stream"},
             )
         elif isinstance(value, FileIO):
-            request_field = RequestField(
-                name=key,
-                data=value.read(),
-                filename=os.path.basename(value.name),
-                headers={"Content-Type": "application/octet-stream"},
-            )
+            # KF: Fix Content-disposition and Content-Type
+            name = key
+            filename = os.path.basename(value.name)
+            data = value.read()
+            mimetype = mimetypes.guess_type(filename)[0] or "application/octet-stream"
             value.close()
-            return request_field
+            return tuple([name, tuple([filename, data, mimetype])])
+            # request_field = RequestField(
+            #     name=key,
+            #     data=value.read(),
+            #     filename=os.path.basename(value.name),
+            #     headers={"Content-Type": "application/octet-stream"},
+            # )
+            # value.close()
+            # return request_field
         else:
-            return self.__multipart_json_item(key=key, value=value)
+            # KF: Fix COntent-disposition
+            request_field = self.__multipart_json_item(key=key, value=value)
+            request_field.make_multipart(content_type="application/json")
+            return request_field
+            # return self.__multipart_json_item(key=key, value=value)
 
     def __serialize_multipart_form_data(
         self, in_data: Schema

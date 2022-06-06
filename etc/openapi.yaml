@@ -244,6 +244,7 @@ paths:
       description: |
         Create a Task and optionally fill its elements. We can fill in any type of element except documents.
         If you want to add document type elements, then use the appropriate API method.
+        If you pass a valid owner then the task will be claimed for it.
 
         If you want the method to be idempotent, please specify the `id` field in the request body.
       operationId: createTask
@@ -257,7 +258,7 @@ paths:
               $ref: "#/components/schemas/Task"
             examples:
               example-one:
-                summary: task with elemennts
+                summary: task with elements
                 value:
                   {
                     "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
@@ -271,6 +272,15 @@ paths:
                         "element_code_2": { "valid": false, "value": 1111 },
                         "element_code_3": [{ "value": "string" }, { "value": "string" }],
                         "element_code_4": { "value": { "form_field_1": "string", "form_field_2": "string" } },
+                        "element_code_5": { "value": { "id": "string", name: "", contentPath: "", contentType: "", contentLength: "" } },
+                        "element_code_6":
+                          [{ "value": { "value": { "id": "string", name: "", contentPath: "", contentType: "", contentLength: "" } } }],
+                        "element_code_7": { "value": { "id": "b90c9ae9-444c-4bfd-9594-7468955d2eda", "type": "USER" } },
+                        "element_code_8":
+                          [
+                            { "value": { "id": "b90c9ae9-444c-4bfd-9594-7468955d2eda", "type": "USER" } },
+                            { "value": { "id": "f4be313c-c0a2-426c-bdd3-c3113d7bbf37", "type": "USER" } },
+                          ],
                       },
                   }
       responses:
@@ -328,7 +338,7 @@ paths:
   /tasks/{id}/~actions/assign:
     post:
       summary: Assign a task
-      description: Allow to assing a task to a user or application. Only one option will be necessary.
+      description: Allow to assign a task to a user or application. Only one option will be necessary.
       operationId: actionsAssignTask
       tags:
         - task
@@ -354,9 +364,11 @@ paths:
     post:
       summary: Save an element
       description: |
-        Allow to save an element that is not a document i.e., a field, a decision or form. If you want to add documents, use the appropriate API method.
+        Allow to save an element i.e., a field, a decision, a form, a principal or document.
 
+        If is a document you need to pass a document reference using the 'id' attribute.
         If values already exist for the provided element code, it replaces them with the new ones, otherwise it creates them.
+        The values of the previous elements that no longer exist will be deleted.
         To remove an element, use the appropriate API method.
       operationId: actionsSaveElement
       tags:
@@ -368,7 +380,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ElementValueOrArrayValue"
+              $ref: "#/components/schemas/TaskElementValueOrArrayValue"
       responses:
         "200":
           description: Task with element filled
@@ -379,15 +391,15 @@ paths:
         default:
           $ref: "#/components/responses/DefaultError"
 
-  /tasks/{id}/~actions/save-element-document:
+  /tasks/{id}/~actions/save-element-value-document:
     post:
       summary: Save an element document
       description: |
-        Allow to save an element document.
+        Allow to save an element document uploading the content.
 
         If it is a multiple element, and the Id referenced in the body does not exist or is empty, the document will be added to the element.
         If the element already exists (the Id referenced in the body corresponds to an existing one), it updates it.
-      operationId: actionsSaveElementDocument
+      operationId: actionsSaveElementValueDocument
       tags:
         - task
       parameters:
@@ -400,7 +412,7 @@ paths:
               type: object
               properties:
                 json:
-                  $ref: "#/components/schemas/SaveElementDocumentCommand"
+                  $ref: "#/components/schemas/SaveElementValueDocumentCommand"
                 file:
                   type: string
                   format: binary
@@ -446,14 +458,14 @@ paths:
         default:
           $ref: "#/components/responses/DefaultError"
 
-  /tasks/{id}/~actions/delete-element-document:
+  /tasks/{id}/~actions/delete-element-value-document:
     post:
       summary: Delete an element document value
       description: |
         Allow to delete a specific document from an element of document type using its id.
 
         Note: If it is a multiple item, it will only delete the specified document. If it is a single element, in addition to the document, it will also delete the element.
-      operationId: actionsDeleteDocument
+      operationId: actionsDeleteValueDocument
       tags:
         - task
       parameters:
@@ -463,7 +475,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DeleteElementDocumentCommand"
+              $ref: "#/components/schemas/DeleteElementValueDocumentCommand"
       responses:
         "200":
           description: Task elements deleted
@@ -473,6 +485,30 @@ paths:
                 $ref: "#/components/schemas/Task"
         default:
           $ref: "#/components/responses/DefaultError"
+
+  /tasks/{id}/~actions/download-element-value-document:
+    get:
+      summary: Download document
+      description: Given a task, download a document from an element of document type
+      operationId: actionsDownloadElementValueDocument
+      tags:
+        - task
+      parameters:
+        - $ref: "#/components/parameters/IdPathParam"
+        - name: documentId
+          in: query
+          description: Document Id to download.
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Document requested
+          content:
+            "*/*":
+              schema:
+                type: string
+                format: binary
 
   /tasks/{id}/~actions/complete:
     post:
@@ -514,31 +550,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Task"
-
-  /tasks/{id}/~actions/download-element-document:
-    get:
-      summary: Download document
-      description: Given a task, download a document from an element of document type
-      operationId: actionsDownloadElementDocument
-      tags:
-        - task
-      parameters:
-        - $ref: "#/components/parameters/IdPathParam"
-        - name: documentId
-          in: query
-          description: Document Id to download.
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "200":
-          description: Document requested
-          content:
-            "*/*":
-              schema:
-                type: string
-                format: binary
 
 x-webhooks:
   events:
@@ -801,15 +812,48 @@ components:
         - COMPLETED
         - CANCELLED
 
-    ElementDefinitionType:
+    ProcessElementValueType:
       type: string
       enum:
-        - FORM
-        - DOCUMENT
-        - DECISION
-        - FIELD
+        - STRING
+        - NUMBER
 
-    ElementValueOrArrayValue:
+    ProcessElementValue: # // TODO REFACTOR THIS ALSO
+      type: object
+      properties:
+        valid:
+          type: boolean
+          default: true
+        type:
+          $ref: "#/components/schemas/ProcessElementValueType"
+        value:
+          type: object # // TODO CAN WE DO THIS ??
+      discriminator:
+        propertyName: type
+        mapping:
+          "STRING": "#/components/schemas/ProcessElementValueString"
+          "NUMBER": "#/components/schemas/ProcessElementValueNumber"
+      required:
+        - type
+
+    ProcessElementValueString:
+      allOf:
+        - $ref: "#/components/schemas/TaskElementValue"
+        - type: object
+          properties:
+            value:
+              type: string
+
+    ProcessElementValueNumber:
+      allOf:
+        - $ref: "#/components/schemas/TaskElementValue"
+        - type: object
+          properties:
+            value:
+              type: number
+              format: double
+
+    TaskElementValueOrArrayValue:
       type: object
       properties:
         code:
@@ -823,16 +867,14 @@ components:
       required:
         - code
 
-    ProcessElementValue:
-      type: object
-      properties:
-        valid:
-          type: boolean
-          default: true
-        value:
-          oneOf:
-            - type: string
-            - type: number
+    TaskElementValueType:
+      type: string
+      enum:
+        - STRING
+        - NUMBER
+        - OBJECT
+        - DOCUMENT
+        - PRINCIPAL
 
     TaskElementValue:
       type: object
@@ -840,18 +882,68 @@ components:
         valid:
           type: boolean
           default: true
+        type:
+          $ref: "#/components/schemas/TaskElementValueType"
         value:
-          oneOf:
-            - type: string
-            - type: number
-            - type: object
+          type: object # // TODO CAN WE DO THIS ??
+      discriminator:
+        propertyName: type
+        mapping:
+          "STRING": "#/components/schemas/TaskElementValueString"
+          "NUMBER": "#/components/schemas/TaskElementValueNumber"
+          "OBJECT": "#/components/schemas/TaskElementValueObject"
+          "DOCUMENT": "#/components/schemas/TaskElementValueDocument"
+          "PRINCIPAL": "#/components/schemas/TaskElementValuePrincipal"
+      required:
+        - type
 
-    ElementValueDocument:
+    TaskElementValueString:
+      allOf:
+        - $ref: "#/components/schemas/TaskElementValue"
+        - type: object
+          properties:
+            value:
+              type: string
+
+    TaskElementValueNumber:
+      allOf:
+        - $ref: "#/components/schemas/TaskElementValue"
+        - type: object
+          properties:
+            value:
+              type: number
+              format: double
+
+    TaskElementValueObject:
+      allOf:
+        - $ref: "#/components/schemas/TaskElementValue"
+        - type: object
+          properties:
+            value:
+              type: object
+              additionalProperties: true
+
+    TaskElementValueDocument:
+      allOf:
+        - $ref: "#/components/schemas/TaskElementValue"
+        - type: object
+          properties:
+            value:
+              $ref: "#/components/schemas/TaskElementValueDocumentItem"
+
+    TaskElementValuePrincipal:
+      allOf:
+        - $ref: "#/components/schemas/TaskElementValue"
+        - type: object
+          properties:
+            value:
+              $ref: "#/components/schemas/TaskElementValuePrincipalItem"
+
+    TaskElementValueDocumentItem:
       type: object
       properties:
         id:
           type: string
-          format: uuid
         name:
           type: string
         contentPath:
@@ -862,7 +954,21 @@ components:
           type: integer
           format: int64
 
-    SaveElementDocumentCommand:
+    TaskElementValuePrincipalItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          $ref: "#/components/schemas/PrincipalType"
+        name:
+          type: string
+      required:
+        - id
+        - type
+
+    SaveElementValueDocumentCommand:
       type: object
       properties:
         id:
@@ -873,6 +979,8 @@ components:
         valid:
           type: boolean
           default: true
+      required:
+        - code
 
     ProcessDefinitionSummary:
       type: object
@@ -952,30 +1060,25 @@ components:
               format: uuid
             activityToken:
               type: string
-              description: When create a Kuflow Task backed with a Temporal.io servers, this value is required and must be setted with the context task token of Temporal.io activity
+              description: When create a Kuflow Task backed with a Temporal.io servers, this value is required and must be set with the context task token of Temporal.io activity
             activityResponseVersion:
               type: string
-              description: When create a Kuflow Task backed with a Temporal.io servers, this value is required and must be setted with the activity version response.
+              description: When create a Kuflow Task backed with a Temporal.io servers, this value is required and must be set with the activity version response.
             elementValues:
               type: object
-              description: A ElementValueDocument or an array of ElementValueDocument is not allowed in any type of requests
+              description: An ElementValueDocument or an array of ElementValueDocument is not allowed in any type of requests
               additionalProperties:
                 oneOf:
                   - $ref: "#/components/schemas/TaskElementValue"
                   - type: array
                     items:
                       $ref: "#/components/schemas/TaskElementValue"
-                  - $ref: "#/components/schemas/ElementValueDocument"
-                  - type: array
-                    items:
-                      $ref: "#/components/schemas/ElementValueDocument"
             logs:
               type: array
               readOnly: true
               items:
                 $ref: "#/components/schemas/Log"
             owner:
-              readOnly: true
               allOf:
                 - $ref: "#/components/schemas/Principal"
           required:
@@ -1048,6 +1151,9 @@ components:
           $ref: "#/components/schemas/PrincipalType"
         name:
           type: string
+      required:
+        - id
+        - type
 
     PrincipalType:
       type: string
@@ -1065,13 +1171,12 @@ components:
       required:
         - code
 
-    DeleteElementDocumentCommand:
+    DeleteElementValueDocumentCommand:
       type: object
       properties:
         documentId:
           description: Document Id to delete
           type: string
-          format: uuid
       required:
         - documentId
 

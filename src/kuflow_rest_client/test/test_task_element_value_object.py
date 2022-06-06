@@ -22,7 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.#
 
-
 """
     KuFlow Public API
 
@@ -36,13 +35,11 @@
 import unittest
 
 import kuflow_rest_client
-from kuflow_rest_client.model.delete_element_document_command import (
-    DeleteElementDocumentCommand,
-)
+from kuflow_rest_client.model.task_element_value_object import TaskElementValueObject
 
 
-class TestDeleteElementDocumentCommand(unittest.TestCase):
-    """DeleteElementDocumentCommand unit test stubs"""
+class TestTaskElementValueObject(unittest.TestCase):
+    """TaskElementValueObject unit test stubs"""
 
     def setUp(self):
         pass
@@ -50,10 +47,10 @@ class TestDeleteElementDocumentCommand(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_DeleteElementDocumentCommand(self):
-        """Test DeleteElementDocumentCommand"""
+    def test_TaskElementValueObject(self):
+        """Test TaskElementValueObject"""
         # FIXME: construct object with mandatory attributes with example values
-        # model = DeleteElementDocumentCommand()  # noqa: E501
+        # model = TaskElementValueObject()  # noqa: E501
         pass
 
 

@@ -24,8 +24,8 @@
 
 import kuflow_rest_client
 from kuflow_rest_client.api import task_api
-from kuflow_rest_client.model.save_element_document_command import (
-    SaveElementDocumentCommand,
+from kuflow_rest_client.model.save_element_value_document_command import (
+    SaveElementValueDocumentCommand,
 )
 
 configuration = kuflow_rest_client.Configuration(
@@ -38,17 +38,17 @@ with kuflow_rest_client.ApiClient(configuration) as api_client:
     api_instance = task_api.TaskApi(api_client)
 
     path_params = {
-        "id": "6c09357e-6a06-3304-8592-4179a8bfd408",
+        "id": "adc7672e-299c-3bbf-906a-bda7c255e1e4",
     }
     body = dict(
-        json=SaveElementDocumentCommand(
+        json=SaveElementValueDocumentCommand(
             code="DOC_MULTIPLE",
         ),
         file=open("/home/user/file.jpg", "rb"),
     )
     try:
         # Save an element document
-        api_response = api_instance.actions_save_element_document(
+        api_response = api_instance.actions_save_element_value_document(
             path_params=path_params,
             body=body,
         )

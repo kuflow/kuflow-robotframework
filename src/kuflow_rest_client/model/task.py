@@ -306,3 +306,10 @@ class Task(ComposedSchema):
 
 
 from kuflow_rest_client.model.abstract_audited import AbstractAudited
+
+# KF: Missing Imports
+from kuflow_rest_client.model.task_state import TaskState
+from kuflow_rest_client.model.tasks_definition_summary import TasksDefinitionSummary
+from kuflow_rest_client.model.log import Log
+from kuflow_rest_client.model.principal import Principal
+# KF: END Missing Imports

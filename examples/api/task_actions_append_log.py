@@ -22,15 +22,17 @@
 # SOFTWARE.#
 
 
+from frozendict import frozendict
 import kuflow_rest_client
 from kuflow_rest_client.api import task_api
 from kuflow_rest_client.model.log import Log
 from kuflow_rest_client.model.log_level import LogLevel
+from kuflow_rest_client.model.tasks_definition_summary import TasksDefinitionSummary
 
 configuration = kuflow_rest_client.Configuration(
-    host="https://api.sandbox.kuflow.com/v1.0",
-    username="72fcb58c-5028-41e1-b4d1-417df487ade6",
-    password="#:X9qHXbU5[8cKd",
+    host="https://api.kuflow.com/v1.0",
+    username="",
+    password="",
 )
 
 with kuflow_rest_client.ApiClient(configuration) as api_client:
@@ -51,5 +53,9 @@ with kuflow_rest_client.ApiClient(configuration) as api_client:
             path_params=path_params,
             body=body,
         )
+
+        taskDefinition = TasksDefinitionSummary(frozendict(api_response.body.taskDefinition))
+        print("Task Definition Code:" + taskDefinition.code)
+        print("Task:", api_response.body)
     except kuflow_rest_client.ApiException as e:
         print("Exception when calling TaskApi->actions_append_log: %s\n" % e)

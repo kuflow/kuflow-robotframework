@@ -35,11 +35,13 @@
 import unittest
 
 import kuflow_rest_client
-from kuflow_rest_client.model.principal_type import PrincipalType
+from kuflow_rest_client.model.task_element_value_document_item import (
+    TaskElementValueDocumentItem,
+)
 
 
-class TestPrincipalType(unittest.TestCase):
-    """PrincipalType unit test stubs"""
+class TestTaskElementValueDocumentItem(unittest.TestCase):
+    """TaskElementValueDocumentItem unit test stubs"""
 
     def setUp(self):
         pass
@@ -47,10 +49,10 @@ class TestPrincipalType(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_PrincipalType(self):
-        """Test PrincipalType"""
+    def test_TaskElementValueDocumentItem(self):
+        """Test TaskElementValueDocumentItem"""
         # FIXME: construct object with mandatory attributes with example values
-        # model = PrincipalType()  # noqa: E501
+        # model = TaskElementValueDocumentItem()  # noqa: E501
         pass
 
 

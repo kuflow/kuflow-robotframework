@@ -36,11 +36,11 @@ with kuflow_rest_client.ApiClient(configuration) as api_client:
     api_instance = task_api.TaskApi(api_client)
 
     path_params = {
-        "id": "0ccf164b-e150-328e-8a86-9d5be73972f1",
+        "id": "adc7672e-299c-3bbf-906a-bda7c255e1e4",
     }
 
     body = DeleteElementCommand(
-        code="DOC01",
+        code="DOC_MULTIPLE",
     )
 
     try:

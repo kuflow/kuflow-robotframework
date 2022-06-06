@@ -296,21 +296,79 @@ components:
       required:
         - code
 
+    TaskElementValueType:
+      type: string
+      enum:
+        - STRING
+        - NUMBER
+        - OBJECT
+        - DOCUMENT
+        - PRINCIPAL
+
     TaskElementValue:
       type: object
       properties:
         valid:
           type: boolean
           default: true
-        value:
-          oneOf:
-            - type: string
-            - type: number
-            - $ref: "#/components/schemas/TaskElementValueDocument"
-            - type: object
-            - $ref: "#/components/schemas/TaskElementValuePrincipal"
+        type:
+          $ref: "#/components/schemas/TaskElementValueType"
+        # value:
+        #   type: object # // TODO CAN WE DO THIS ??
+      discriminator:
+        propertyName: type
+        mapping:
+          "STRING": "#/components/schemas/TaskElementValueString"
+          "NUMBER": "#/components/schemas/TaskElementValueNumber"
+          "OBJECT": "#/components/schemas/TaskElementValueObject"
+          "DOCUMENT": "#/components/schemas/TaskElementValueDocument"
+          "PRINCIPAL": "#/components/schemas/TaskElementValuePrincipal"
+      required:
+        - type
+
+    TaskElementValueString:
+      allOf:
+        - $ref: "#/components/schemas/TaskElementValue"
+        - type: object
+          properties:
+            value:
+              type: string
+
+    TaskElementValueNumber:
+      allOf:
+        - $ref: "#/components/schemas/TaskElementValue"
+        - type: object
+          properties:
+            value:
+              type: number
+              format: double
+
+    TaskElementValueObject:
+      allOf:
+        - $ref: "#/components/schemas/TaskElementValue"
+        - type: object
+          properties:
+            value:
+              type: object
+              additionalProperties: true
 
     TaskElementValueDocument:
+      allOf:
+        - $ref: "#/components/schemas/TaskElementValue"
+        - type: object
+          properties:
+            value:
+              $ref: "#/components/schemas/TaskElementValueDocumentItem"
+
+    TaskElementValuePrincipal:
+      allOf:
+        - $ref: "#/components/schemas/TaskElementValue"
+        - type: object
+          properties:
+            value:
+              $ref: "#/components/schemas/TaskElementValuePrincipalItem"
+
+    TaskElementValueDocumentItem:
       type: object
       properties:
         id:
@@ -325,7 +383,7 @@ components:
           type: integer
           format: int64
 
-    TaskElementValuePrincipal:
+    TaskElementValuePrincipalItem:
       type: object
       properties:
         id:
