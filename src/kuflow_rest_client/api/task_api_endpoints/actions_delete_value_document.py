@@ -22,7 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.#
 
-
 """
 
 
@@ -34,6 +33,7 @@ import re  # noqa: F401
 import sys  # noqa: F401
 import typing
 import urllib3
+import functools  # noqa: F401
 from urllib3._collections import HTTPHeaderDict
 
 from kuflow_rest_client import api_client, exceptions
@@ -53,6 +53,7 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     Float32Schema,
     Float64Schema,
     NumberSchema,
+    UUIDSchema,
     DateSchema,
     DateTimeSchema,
     DecimalSchema,
@@ -60,7 +61,7 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     BinarySchema,
     NoneSchema,
     none_type,
-    InstantiationMetadata,
+    Configuration,
     Unset,
     unset,
     ComposedBase,
@@ -69,7 +70,12 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     NoneBase,
     StrBase,
     IntBase,
+    Int32Base,
+    Int64Base,
+    Float32Base,
+    Float64Base,
     NumberBase,
+    UUIDBase,
     DateBase,
     DateTimeBase,
     BoolBase,
@@ -80,13 +86,14 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     _SchemaEnumMaker,
 )
 
-from kuflow_rest_client.model.save_element_document_command import (
-    SaveElementDocumentCommand,
+from kuflow_rest_client.model.default_error import DefaultError
+from kuflow_rest_client.model.delete_element_value_document_command import (
+    DeleteElementValueDocumentCommand,
 )
 from kuflow_rest_client.model.task import Task
 
 # path params
-IdSchema = StrSchema
+IdSchema = UUIDSchema
 RequestRequiredPathParams = typing.TypedDict(
     "RequestRequiredPathParams",
     {
@@ -109,43 +116,18 @@ request_path_id = api_client.PathParameter(
     required=True,
 )
 # body param
+SchemaForRequestBodyApplicationJson = DeleteElementValueDocumentCommand
 
 
-class SchemaForRequestBodyMultipartFormData(DictSchema):
-    _required_property_names = set(())
-
-    @classmethod
-    @property
-    def json(cls) -> typing.Type["SaveElementDocumentCommand"]:
-        return SaveElementDocumentCommand
-
-    file = BinarySchema
-
-    def __new__(
-        cls,
-        *args: typing.Union[
-            dict,
-            frozendict,
-        ],
-        _instantiation_metadata: typing.Optional[InstantiationMetadata] = None,
-        **kwargs: typing.Type[Schema],
-    ) -> "SchemaForRequestBodyMultipartFormData":
-        return super().__new__(
-            cls,
-            *args,
-            _instantiation_metadata=_instantiation_metadata,
-            **kwargs,
-        )
-
-
-request_body_body = api_client.RequestBody(
+request_body_delete_element_value_document_command = api_client.RequestBody(
     content={
-        "multipart/form-data": api_client.MediaType(
-            schema=SchemaForRequestBodyMultipartFormData
+        "application/json": api_client.MediaType(
+            schema=SchemaForRequestBodyApplicationJson
         ),
     },
+    required=True,
 )
-_path = "/tasks/{id}/~actions/save-element-document"
+_path = "/tasks/{id}/~actions/delete-element-value-document"
 _method = "POST"
 _auth = [
     "BasicAuth",
@@ -170,25 +152,50 @@ _response_for_200 = api_client.OpenApiResponse(
         ),
     },
 )
+SchemaFor0ResponseBodyApplicationJson = DefaultError
+
+
+@dataclass
+class ApiResponseForDefault(api_client.ApiResponse):
+    response: urllib3.HTTPResponse
+    body: typing.Union[
+        SchemaFor0ResponseBodyApplicationJson,
+    ]
+    headers: Unset = unset
+
+
+_response_for_default = api_client.OpenApiResponse(
+    response_cls=ApiResponseForDefault,
+    content={
+        "application/json": api_client.MediaType(
+            schema=SchemaFor0ResponseBodyApplicationJson
+        ),
+    },
+)
 _status_code_to_response = {
     "200": _response_for_200,
+    "default": _response_for_default,
 }
 _all_accept_content_types = ("application/json",)
 
 
-class ActionsSaveElementDocument(api_client.Api):
-    def actions_save_element_document(
+class ActionsDeleteValueDocument(api_client.Api):
+    def actions_delete_value_document(
         self: api_client.Api,
-        body: typing.Union[SchemaForRequestBodyMultipartFormData, Unset] = unset,
+        body: typing.Union[SchemaForRequestBodyApplicationJson],
         path_params: RequestPathParams = frozendict(),
-        content_type: str = "multipart/form-data",
+        content_type: str = "application/json",
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
-    ) -> typing.Union[ApiResponseFor200, api_client.ApiResponseWithoutDeserialization]:
+    ) -> typing.Union[
+        ApiResponseFor200,
+        ApiResponseForDefault,
+        api_client.ApiResponseWithoutDeserialization,
+    ]:
         """
-        Save an element document
+        Delete an element document value
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -209,15 +216,20 @@ class ActionsSaveElementDocument(api_client.Api):
             for accept_content_type in accept_content_types:
                 _headers.add("Accept", accept_content_type)
 
+        if body is unset:
+            raise exceptions.ApiValueError(
+                "The required body parameter has an invalid value of: unset. Set a valid value instead"
+            )
         _fields = None
         _body = None
-        if body is not unset:
-            serialized_data = request_body_body.serialize(body, content_type)
-            _headers.add("Content-Type", content_type)
-            if "fields" in serialized_data:
-                _fields = serialized_data["fields"]
-            elif "body" in serialized_data:
-                _body = serialized_data["body"]
+        serialized_data = request_body_delete_element_value_document_command.serialize(
+            body, content_type
+        )
+        _headers.add("Content-Type", content_type)
+        if "fields" in serialized_data:
+            _fields = serialized_data["fields"]
+        elif "body" in serialized_data:
+            _body = serialized_data["body"]
         response = self.api_client.call_api(
             resource_path=_path,
             method=_method,
@@ -241,9 +253,15 @@ class ActionsSaveElementDocument(api_client.Api):
                     response, self.api_client.configuration
                 )
             else:
-                api_response = api_client.ApiResponseWithoutDeserialization(
-                    response=response
-                )
+                default_response = _status_code_to_response.get("default")
+                if default_response:
+                    api_response = default_response.deserialize(
+                        response, self.api_client.configuration
+                    )
+                else:
+                    api_response = api_client.ApiResponseWithoutDeserialization(
+                        response=response
+                    )
 
         if not 200 <= response.status <= 299:
             raise exceptions.ApiException(api_response=api_response)

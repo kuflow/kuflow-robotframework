@@ -22,7 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.#
 
-
 """
     KuFlow Public API
 
@@ -439,7 +438,7 @@ class Configuration(object):
             "OS: {env}\n"
             "Python Version: {pyversion}\n"
             "Version of the API: 1.0\n"
-            "SDK Package Version: 0.2.1".format(env=sys.platform, pyversion=sys.version)
+            "SDK Package Version: 0.3.0".format(env=sys.platform, pyversion=sys.version)
         )
 
     def get_host_settings(self):

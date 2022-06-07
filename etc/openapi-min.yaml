@@ -59,9 +59,13 @@ paths:
     post:
       summary: Save an element
       description: |
-        Allow to save an element that is not a document i.e., a field, a decision or form. If you want to add documents, use the appropriate API method.
+        Allow to save an element i.e., a field, a decision, a form, a principal or document.
 
+        In the case of document type elements, this method only allows references to be made to other existing document type
+        elements for the purpose of copying that file into the element. To do this you need to pass a reference to the document
+        using the 'uri' attribute. In case you want to add a new document, please use the corresponding API method.
         If values already exist for the provided element code, it replaces them with the new ones, otherwise it creates them.
+        The values of the previous elements that no longer exist will be deleted.
         To remove an element, use the appropriate API method.
       operationId: actionsSaveElement
       tags:
@@ -73,7 +77,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ElementValueOrArrayValue"
+              $ref: "#/components/schemas/TaskElementValueOrArrayValue"
       responses:
         "200":
           description: Task with element filled
@@ -84,15 +88,15 @@ paths:
         default:
           $ref: "#/components/responses/DefaultError"
 
-  /tasks/{id}/~actions/save-element-document:
+  /tasks/{id}/~actions/save-element-value-document:
     post:
       summary: Save an element document
       description: |
-        Allow to save an element document.
+        Allow to save an element document uploading the content.
 
         If it is a multiple element, and the Id referenced in the body does not exist or is empty, the document will be added to the element.
         If the element already exists (the Id referenced in the body corresponds to an existing one), it updates it.
-      operationId: actionsSaveElementDocument
+      operationId: actionsSaveElementValueDocument
       tags:
         - task
       parameters:
@@ -105,16 +109,16 @@ paths:
               type: object
               properties:
                 json:
-                  $ref: "#/components/schemas/SaveElementDocumentCommand"
+                  $ref: "#/components/schemas/SaveElementValueDocumentCommand"
                 file:
                   type: string
                   format: binary
               required:
                 - json
                 - file
-            # encoding:
-            #   file:
-            #     contentType: image/*, application/pdf
+          #  encoding:
+          #    file:
+          #      contentType: image/*, application/pdf
       responses:
         "200":
           description: Task with element filled
@@ -151,14 +155,14 @@ paths:
         default:
           $ref: "#/components/responses/DefaultError"
 
-  /tasks/{id}/~actions/delete-element-document:
+  /tasks/{id}/~actions/delete-element-value-document:
     post:
       summary: Delete an element document value
       description: |
         Allow to delete a specific document from an element of document type using its id.
 
         Note: If it is a multiple item, it will only delete the specified document. If it is a single element, in addition to the document, it will also delete the element.
-      operationId: actionsDeleteDocument
+      operationId: actionsDeleteValueDocument
       tags:
         - task
       parameters:
@@ -168,7 +172,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DeleteElementDocumentCommand"
+              $ref: "#/components/schemas/DeleteElementValueDocumentCommand"
       responses:
         "200":
           description: Task elements deleted
@@ -280,7 +284,7 @@ components:
         - COMPLETED
         - CANCELLED
 
-    ElementValueOrArrayValue:
+    TaskElementValueOrArrayValue:
       type: object
       properties:
         code:
@@ -294,24 +298,84 @@ components:
       required:
         - code
 
+    TaskElementValueType:
+      type: string
+      enum:
+        - STRING
+        - NUMBER
+        - OBJECT
+        - DOCUMENT
+        - PRINCIPAL
+
     TaskElementValue:
       type: object
       properties:
         valid:
           type: boolean
           default: true
-        value:
-          oneOf:
-            - type: string
-            - type: number
-            - type: object
+        type:
+          $ref: "#/components/schemas/TaskElementValueType"
+      discriminator:
+        propertyName: type
+        mapping:
+          "STRING": "#/components/schemas/TaskElementValueString"
+          "NUMBER": "#/components/schemas/TaskElementValueNumber"
+          "OBJECT": "#/components/schemas/TaskElementValueObject"
+          "DOCUMENT": "#/components/schemas/TaskElementValueDocument"
+          "PRINCIPAL": "#/components/schemas/TaskElementValuePrincipal"
+      required:
+        - type
 
-    ElementValueDocument:
+    TaskElementValueString:
+      allOf:
+        - $ref: "#/components/schemas/TaskElementValue"
+        - type: object
+          properties:
+            value:
+              type: string
+
+    TaskElementValueNumber:
+      allOf:
+        - $ref: "#/components/schemas/TaskElementValue"
+        - type: object
+          properties:
+            value:
+              type: number
+              format: double
+
+    TaskElementValueObject:
+      allOf:
+        - $ref: "#/components/schemas/TaskElementValue"
+        - type: object
+          properties:
+            value:
+              type: object
+              additionalProperties: true
+
+    TaskElementValueDocument:
+      allOf:
+        - $ref: "#/components/schemas/TaskElementValue"
+        - type: object
+          properties:
+            value:
+              $ref: "#/components/schemas/TaskElementValueDocumentItem"
+
+    TaskElementValuePrincipal:
+      allOf:
+        - $ref: "#/components/schemas/TaskElementValue"
+        - type: object
+          properties:
+            value:
+              $ref: "#/components/schemas/TaskElementValuePrincipalItem"
+
+    TaskElementValueDocumentItem:
       type: object
       properties:
         id:
           type: string
           format: uuid
+        uri:
+          type: string
         name:
           type: string
         contentPath:
@@ -322,7 +386,21 @@ components:
           type: integer
           format: int64
 
-    SaveElementDocumentCommand:
+    TaskElementValuePrincipalItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          $ref: "#/components/schemas/PrincipalType"
+        name:
+          type: string
+      required:
+        - id
+        - type
+
+    SaveElementValueDocumentCommand:
       type: object
       properties:
         id:
@@ -333,6 +411,8 @@ components:
         valid:
           type: boolean
           default: true
+      required:
+        - code
 
     Task:
       allOf:
@@ -353,30 +433,25 @@ components:
               format: uuid
             activityToken:
               type: string
-              description: When create a Kuflow Task backed with a Temporal.io servers, this value is required and must be setted with the context task token of Temporal.io activity
+              description: When create a Kuflow Task backed with a Temporal.io servers, this value is required and must be set with the context task token of Temporal.io activity
             activityResponseVersion:
               type: string
-              description: When create a Kuflow Task backed with a Temporal.io servers, this value is required and must be setted with the activity version response.
+              description: When create a Kuflow Task backed with a Temporal.io servers, this value is required and must be set with the activity version response.
             elementValues:
               type: object
-              description: A ElementValueDocument or an array of ElementValueDocument is not allowed in any type of requests
+              description: An ElementValueDocument or an array of ElementValueDocument is not allowed in any type of requests
               additionalProperties:
                 oneOf:
                   - $ref: "#/components/schemas/TaskElementValue"
                   - type: array
                     items:
                       $ref: "#/components/schemas/TaskElementValue"
-                  - $ref: "#/components/schemas/ElementValueDocument"
-                  - type: array
-                    items:
-                      $ref: "#/components/schemas/ElementValueDocument"
             logs:
               type: array
               readOnly: true
               items:
                 $ref: "#/components/schemas/Log"
             owner:
-              readOnly: true
               allOf:
                 - $ref: "#/components/schemas/Principal"
           required:
@@ -437,6 +512,9 @@ components:
           $ref: "#/components/schemas/PrincipalType"
         name:
           type: string
+      required:
+        - id
+        - type
 
     PrincipalType:
       type: string
@@ -454,7 +532,7 @@ components:
       required:
         - code
 
-    DeleteElementDocumentCommand:
+    DeleteElementValueDocumentCommand:
       type: object
       properties:
         documentId:

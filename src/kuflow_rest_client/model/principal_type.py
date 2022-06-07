@@ -22,7 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.#
 
-
 """
     KuFlow Public API
 
@@ -36,6 +35,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 import typing  # noqa: F401
+import functools  # noqa: F401
 
 from frozendict import frozendict  # noqa: F401
 
@@ -55,6 +55,7 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     Float32Schema,
     Float64Schema,
     NumberSchema,
+    UUIDSchema,
     DateSchema,
     DateTimeSchema,
     DecimalSchema,
@@ -62,7 +63,7 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     BinarySchema,
     NoneSchema,
     none_type,
-    InstantiationMetadata,
+    Configuration,
     Unset,
     unset,
     ComposedBase,
@@ -71,7 +72,12 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     NoneBase,
     StrBase,
     IntBase,
+    Int32Base,
+    Int64Base,
+    Float32Base,
+    Float64Base,
     NumberBase,
+    UUIDBase,
     DateBase,
     DateTimeBase,
     BoolBase,
@@ -102,14 +108,14 @@ class PrincipalType(
     @classmethod
     @property
     def USER(cls):
-        return cls._enum_by_value["USER"]("USER")
+        return cls("USER")
 
     @classmethod
     @property
     def APPLICATION(cls):
-        return cls._enum_by_value["APPLICATION"]("APPLICATION")
+        return cls("APPLICATION")
 
     @classmethod
     @property
     def SYSTEM(cls):
-        return cls._enum_by_value["SYSTEM"]("SYSTEM")
+        return cls("SYSTEM")

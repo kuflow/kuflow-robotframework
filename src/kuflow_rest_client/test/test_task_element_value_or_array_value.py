@@ -22,7 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.#
 
-
 """
     KuFlow Public API
 
@@ -36,11 +35,13 @@
 import unittest
 
 import kuflow_rest_client
-from kuflow_rest_client.model.element_value_document import ElementValueDocument
+from kuflow_rest_client.model.task_element_value_or_array_value import (
+    TaskElementValueOrArrayValue,
+)
 
 
-class TestElementValueDocument(unittest.TestCase):
-    """ElementValueDocument unit test stubs"""
+class TestTaskElementValueOrArrayValue(unittest.TestCase):
+    """TaskElementValueOrArrayValue unit test stubs"""
 
     def setUp(self):
         pass
@@ -48,10 +49,10 @@ class TestElementValueDocument(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_ElementValueDocument(self):
-        """Test ElementValueDocument"""
+    def test_TaskElementValueOrArrayValue(self):
+        """Test TaskElementValueOrArrayValue"""
         # FIXME: construct object with mandatory attributes with example values
-        # model = ElementValueDocument()  # noqa: E501
+        # model = TaskElementValueOrArrayValue()  # noqa: E501
         pass
 
 

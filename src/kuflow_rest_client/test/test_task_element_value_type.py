@@ -22,7 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.#
 
-
 """
     KuFlow Public API
 
@@ -36,11 +35,11 @@
 import unittest
 
 import kuflow_rest_client
-from kuflow_rest_client.model.task_all_of import TaskAllOf
+from kuflow_rest_client.model.task_element_value_type import TaskElementValueType
 
 
-class TestTaskAllOf(unittest.TestCase):
-    """TaskAllOf unit test stubs"""
+class TestTaskElementValueType(unittest.TestCase):
+    """TaskElementValueType unit test stubs"""
 
     def setUp(self):
         pass
@@ -48,10 +47,10 @@ class TestTaskAllOf(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_TaskAllOf(self):
-        """Test TaskAllOf"""
+    def test_TaskElementValueType(self):
+        """Test TaskElementValueType"""
         # FIXME: construct object with mandatory attributes with example values
-        # model = TaskAllOf()  # noqa: E501
+        # model = TaskElementValueType()  # noqa: E501
         pass
 
 

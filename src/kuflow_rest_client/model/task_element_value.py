@@ -22,7 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.#
 
-
 """
     KuFlow Public API
 
@@ -36,6 +35,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 import typing  # noqa: F401
+import functools  # noqa: F401
 
 from frozendict import frozendict  # noqa: F401
 
@@ -55,6 +55,7 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     Float32Schema,
     Float64Schema,
     NumberSchema,
+    UUIDSchema,
     DateSchema,
     DateTimeSchema,
     DecimalSchema,
@@ -62,7 +63,7 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     BinarySchema,
     NoneSchema,
     none_type,
-    InstantiationMetadata,
+    Configuration,
     Unset,
     unset,
     ComposedBase,
@@ -71,7 +72,12 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     NoneBase,
     StrBase,
     IntBase,
+    Int32Base,
+    Int64Base,
+    Float32Base,
+    Float64Base,
     NumberBase,
+    UUIDBase,
     DateBase,
     DateTimeBase,
     BoolBase,
@@ -90,57 +96,31 @@ class TaskElementValue(DictSchema):
     Do not edit the class manually.
     """
 
+    _required_property_names = set(("type",))
     valid = BoolSchema
 
-    class value(ComposedSchema):
-        @classmethod
-        @property
-        def _composed_schemas(cls):
-            # we need this here to make our import statements work
-            # we must store _composed_schemas in here so the code is only run
-            # when we invoke this method. If we kept this at the class
-            # level we would get an error because the class level
-            # code would be run when this module is imported, and these composed
-            # classes don't exist yet because their module has not finished
-            # loading
-            oneOf_0 = StrSchema
-            oneOf_1 = NumberSchema
-            oneOf_2 = DictSchema
-            return {
-                "allOf": [],
-                "oneOf": [
-                    oneOf_0,
-                    oneOf_1,
-                    oneOf_2,
-                ],
-                "anyOf": [],
-            }
+    @classmethod
+    @property
+    def type(cls) -> typing.Type["TaskElementValueType"]:
+        return TaskElementValueType
 
-        def __new__(
-            cls,
-            *args: typing.Union[
-                dict,
-                frozendict,
-                str,
-                date,
-                datetime,
-                int,
-                float,
-                decimal.Decimal,
-                None,
-                list,
-                tuple,
-                bytes,
-            ],
-            _instantiation_metadata: typing.Optional[InstantiationMetadata] = None,
-            **kwargs: typing.Type[Schema],
-        ) -> "value":
-            return super().__new__(
-                cls,
-                *args,
-                _instantiation_metadata=_instantiation_metadata,
-                **kwargs,
-            )
+    @classmethod
+    @property
+    def _discriminator(cls):
+        return {
+            "type": {
+                "DOCUMENT": TaskElementValueDocument,
+                "NUMBER": TaskElementValueNumber,
+                "OBJECT": TaskElementValueObject,
+                "PRINCIPAL": TaskElementValuePrincipal,
+                "STRING": TaskElementValueString,
+                "TaskElementValueDocument": TaskElementValueDocument,
+                "TaskElementValueNumber": TaskElementValueNumber,
+                "TaskElementValueObject": TaskElementValueObject,
+                "TaskElementValuePrincipal": TaskElementValuePrincipal,
+                "TaskElementValueString": TaskElementValueString,
+            }
+        }
 
     def __new__(
         cls,
@@ -148,16 +128,28 @@ class TaskElementValue(DictSchema):
             dict,
             frozendict,
         ],
+        type: type,
         valid: typing.Union[valid, Unset] = unset,
-        value: typing.Union[value, Unset] = unset,
-        _instantiation_metadata: typing.Optional[InstantiationMetadata] = None,
+        _configuration: typing.Optional[Configuration] = None,
         **kwargs: typing.Type[Schema],
     ) -> "TaskElementValue":
         return super().__new__(
             cls,
             *args,
+            type=type,
             valid=valid,
-            value=value,
-            _instantiation_metadata=_instantiation_metadata,
+            _configuration=_configuration,
             **kwargs,
         )
+
+
+from kuflow_rest_client.model.task_element_value_document import (
+    TaskElementValueDocument,
+)
+from kuflow_rest_client.model.task_element_value_number import TaskElementValueNumber
+from kuflow_rest_client.model.task_element_value_object import TaskElementValueObject
+from kuflow_rest_client.model.task_element_value_principal import (
+    TaskElementValuePrincipal,
+)
+from kuflow_rest_client.model.task_element_value_string import TaskElementValueString
+from kuflow_rest_client.model.task_element_value_type import TaskElementValueType

@@ -22,7 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.#
 
-
 """
     KuFlow Public API
 
@@ -55,6 +54,20 @@ class TestTaskApi(unittest.TestCase):
         """
         pass
 
+    def test_actions_delete_element(self):
+        """Test case for actions_delete_element
+
+        Delete an element by code  # noqa: E501
+        """
+        pass
+
+    def test_actions_delete_value_document(self):
+        """Test case for actions_delete_value_document
+
+        Delete an element document value  # noqa: E501
+        """
+        pass
+
     def test_actions_save_element(self):
         """Test case for actions_save_element
 
@@ -62,8 +75,8 @@ class TestTaskApi(unittest.TestCase):
         """
         pass
 
-    def test_actions_save_element_document(self):
-        """Test case for actions_save_element_document
+    def test_actions_save_element_value_document(self):
+        """Test case for actions_save_element_value_document
 
         Save an element document  # noqa: E501
         """

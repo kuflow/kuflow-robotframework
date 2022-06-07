@@ -24,7 +24,7 @@
 
 import kuflow_rest_client
 from kuflow_rest_client.api import task_api
-from kuflow_rest_client.model.delete_element_document_command import DeleteElementDocumentCommand
+from kuflow_rest_client.model.delete_element_value_document_command import DeleteElementValueDocumentCommand
 
 configuration = kuflow_rest_client.Configuration(
     host="https://api.kuflow.com/v1.0",
@@ -39,13 +39,13 @@ with kuflow_rest_client.ApiClient(configuration) as api_client:
         "id": "0ccf164b-e150-328e-8a86-9d5be73972f1",
     }
 
-    body = DeleteElementDocumentCommand(
+    body = DeleteElementValueDocumentCommand(
         documentId="79fdcd62-14f4-4789-8957-085297f4615a",
     )
 
     try:
         # Delete an element document value
-        api_response = api_instance.actions_delete_document(
+        api_response = api_instance.actions_delete_value_document(
             path_params=path_params,
             body=body,
         )

@@ -22,7 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.#
 
-
 """
 
 
@@ -34,6 +33,7 @@ import re  # noqa: F401
 import sys  # noqa: F401
 import typing
 import urllib3
+import functools  # noqa: F401
 from urllib3._collections import HTTPHeaderDict
 
 from kuflow_rest_client import api_client, exceptions
@@ -53,6 +53,7 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     Float32Schema,
     Float64Schema,
     NumberSchema,
+    UUIDSchema,
     DateSchema,
     DateTimeSchema,
     DecimalSchema,
@@ -60,7 +61,7 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     BinarySchema,
     NoneSchema,
     none_type,
-    InstantiationMetadata,
+    Configuration,
     Unset,
     unset,
     ComposedBase,
@@ -69,7 +70,12 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     NoneBase,
     StrBase,
     IntBase,
+    Int32Base,
+    Int64Base,
+    Float32Base,
+    Float64Base,
     NumberBase,
+    UUIDBase,
     DateBase,
     DateTimeBase,
     BoolBase,
@@ -81,13 +87,13 @@ from kuflow_rest_client.schemas import (  # noqa: F401
 )
 
 from kuflow_rest_client.model.default_error import DefaultError
-from kuflow_rest_client.model.element_value_or_array_value import (
-    ElementValueOrArrayValue,
+from kuflow_rest_client.model.task_element_value_or_array_value import (
+    TaskElementValueOrArrayValue,
 )
 from kuflow_rest_client.model.task import Task
 
 # path params
-IdSchema = StrSchema
+IdSchema = UUIDSchema
 RequestRequiredPathParams = typing.TypedDict(
     "RequestRequiredPathParams",
     {
@@ -110,10 +116,10 @@ request_path_id = api_client.PathParameter(
     required=True,
 )
 # body param
-SchemaForRequestBodyApplicationJson = ElementValueOrArrayValue
+SchemaForRequestBodyApplicationJson = TaskElementValueOrArrayValue
 
 
-request_body_element_value_or_array_value = api_client.RequestBody(
+request_body_task_element_value_or_array_value = api_client.RequestBody(
     content={
         "application/json": api_client.MediaType(
             schema=SchemaForRequestBodyApplicationJson
@@ -216,7 +222,7 @@ class ActionsSaveElement(api_client.Api):
             )
         _fields = None
         _body = None
-        serialized_data = request_body_element_value_or_array_value.serialize(
+        serialized_data = request_body_task_element_value_or_array_value.serialize(
             body, content_type
         )
         _headers.add("Content-Type", content_type)

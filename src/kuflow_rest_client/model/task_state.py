@@ -22,7 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.#
 
-
 """
     KuFlow Public API
 
@@ -36,6 +35,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 import typing  # noqa: F401
+import functools  # noqa: F401
 
 from frozendict import frozendict  # noqa: F401
 
@@ -55,6 +55,7 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     Float32Schema,
     Float64Schema,
     NumberSchema,
+    UUIDSchema,
     DateSchema,
     DateTimeSchema,
     DecimalSchema,
@@ -62,7 +63,7 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     BinarySchema,
     NoneSchema,
     none_type,
-    InstantiationMetadata,
+    Configuration,
     Unset,
     unset,
     ComposedBase,
@@ -71,7 +72,12 @@ from kuflow_rest_client.schemas import (  # noqa: F401
     NoneBase,
     StrBase,
     IntBase,
+    Int32Base,
+    Int64Base,
+    Float32Base,
+    Float64Base,
     NumberBase,
+    UUIDBase,
     DateBase,
     DateTimeBase,
     BoolBase,
@@ -103,19 +109,19 @@ class TaskState(
     @classmethod
     @property
     def READY(cls):
-        return cls._enum_by_value["READY"]("READY")
+        return cls("READY")
 
     @classmethod
     @property
     def CLAIMED(cls):
-        return cls._enum_by_value["CLAIMED"]("CLAIMED")
+        return cls("CLAIMED")
 
     @classmethod
     @property
     def COMPLETED(cls):
-        return cls._enum_by_value["COMPLETED"]("COMPLETED")
+        return cls("COMPLETED")
 
     @classmethod
     @property
     def CANCELLED(cls):
-        return cls._enum_by_value["CANCELLED"]("CANCELLED")
+        return cls("CANCELLED")
