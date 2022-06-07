@@ -97,7 +97,7 @@ class DeleteElementValueDocumentCommand(DictSchema):
     """
 
     _required_property_names = set(("documentId",))
-    documentId = StrSchema
+    documentId = UUIDSchema
 
     def __new__(
         cls,

@@ -4,6 +4,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** |  | [optional] 
+**uri** | **str** |  | [optional] 
 **name** | **str** |  | [optional] 
 **contentPath** | **str** |  | [optional] 
 **contentType** | **str** |  | [optional] 

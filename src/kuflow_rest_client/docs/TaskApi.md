@@ -396,7 +396,7 @@ Type | Description  | Notes
 
 Save an element
 
-Allow to save an element i.e., a field, a decision, a form, a principal or document.  If is a document you need to pass a document reference using the 'id' attribute. If values already exist for the provided element code, it replaces them with the new ones, otherwise it creates them. The values of the previous elements that no longer exist will be deleted. To remove an element, use the appropriate API method. 
+Allow to save an element i.e., a field, a decision, a form, a principal or document.  In the case of document type elements, this method only allows references to be made to other existing document type elements for the purpose of copying that file into the element. To do this you need to pass a reference to the document using the 'uri' attribute. In case you want to add a new document, please use the corresponding API method. If values already exist for the provided element code, it replaces them with the new ones, otherwise it creates them. The values of the previous elements that no longer exist will be deleted. To remove an element, use the appropriate API method. 
 
 ### Example
 

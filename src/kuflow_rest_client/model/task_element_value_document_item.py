@@ -96,7 +96,8 @@ class TaskElementValueDocumentItem(DictSchema):
     Do not edit the class manually.
     """
 
-    id = StrSchema
+    id = UUIDSchema
+    uri = StrSchema
     name = StrSchema
     contentPath = StrSchema
     contentType = StrSchema
@@ -109,6 +110,7 @@ class TaskElementValueDocumentItem(DictSchema):
             frozendict,
         ],
         id: typing.Union[id, Unset] = unset,
+        uri: typing.Union[uri, Unset] = unset,
         name: typing.Union[name, Unset] = unset,
         contentPath: typing.Union[contentPath, Unset] = unset,
         contentType: typing.Union[contentType, Unset] = unset,
@@ -120,6 +122,7 @@ class TaskElementValueDocumentItem(DictSchema):
             cls,
             *args,
             id=id,
+            uri=uri,
             name=name,
             contentPath=contentPath,
             contentType=contentType,
