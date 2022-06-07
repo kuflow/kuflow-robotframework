@@ -24,7 +24,7 @@
 
 from .keywords import Keywords
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 
 
 class KuFlow(Keywords):
