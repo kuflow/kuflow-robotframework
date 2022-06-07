@@ -45,7 +45,7 @@ with kuflow_rest_client.ApiClient(configuration) as api_client:
 
     try:
         # Delete an element by code
-        api_response = api_instance.actions_delete_element(
+        api_response = api_instance.actions_delete_value_document(
             path_params=path_params,
             body=body,
         )

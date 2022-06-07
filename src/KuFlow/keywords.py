@@ -97,8 +97,10 @@ class Keywords:
         self._do_append_log_request(task_id, body)
 
     @keyword()
-    def save_element_document(self, task_id: str, code: str, path):
+    def save_element_document(self, task_id: str, code: str, path, documentId: str = None):
         """Save a element of type document
+
+        Allow to save an element document uploading the content.
 
         If it is a multiple element, and the Id referenced in the body does not exist or is empty,
         the document will be added to the element.
@@ -109,11 +111,13 @@ class Keywords:
         | Save Element Document | ${TASK_ID} | ${CODE} | ${PATH}
         =>
         | Save Element Document | ${TASK_ID} | ELEMENT_KEY | hello.jpg
+        | Save Element Document | ${TASK_ID} | ELEMENT_KEY | hello.jpg | ku:task/acdca56f-b8aa-46c8-9055-8ee52810a4a9/element-value/a05f197f-a50a-46d5-bdec-29a0c020f0d7
         """
 
         body = dict(
             json=SaveElementValueDocumentCommand(
                 code=code,
+                id=documentId if documentId is not None else ""
             ),
             file=open(path, "rb"),
         )
@@ -291,7 +295,7 @@ class Keywords:
             }
 
             try:
-                api_instance.actions_save_element_document(
+                api_instance.actions_save_element_value_document(
                     path_params=path_params,
                     body=body,
                 )
@@ -352,7 +356,7 @@ class Keywords:
             }
 
             try:
-                api_instance.actions_delete_document(
+                api_instance.actions_delete_value_document(
                     path_params=path_params,
                     body=body,
                 )

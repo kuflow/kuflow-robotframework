@@ -1491,7 +1491,7 @@ class RequestBody(StyleFormSerializer, JSONDetector):
             # value.close()
             # return request_field
         else:
-            # KF: Fix COntent-disposition
+            # KF: Fix Content-disposition
             request_field = self.__multipart_json_item(key=key, value=value)
             request_field.make_multipart(content_type="application/json")
             return request_field
