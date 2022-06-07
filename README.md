@@ -13,6 +13,10 @@ List of available keywords:
 
 > Configure the client authentication in order to execute keywords against Rest API.
 
+#### Append Log Message
+
+> Add a log entry to the task
+
 #### Save Element Document 
 
 > Save a element task of type document 
@@ -21,10 +25,6 @@ List of available keywords:
 
 > Save a element task
 
-#### Append Log Message
-
-> Add a log entry to the task
-
 #### Delete Element Document
 
 > Allow to delete a specific document from an element of document type using its id.
@@ -32,6 +32,14 @@ List of available keywords:
 #### Delete Element 
 
 > Allow to delete task element by specifying the item definition code.
+
+#### Convert To Element Value Principal Item
+
+> Given an Id of a Principal user, create an item that represents a reference to the Principal.
+
+#### Convert To Element Value Document Item
+
+> Given an Id of a Document or the URI reference of a Document, create an item that represents a reference to the Document elementand can be used.
 
 ## Documentation
 
